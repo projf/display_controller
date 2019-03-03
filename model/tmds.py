@@ -85,7 +85,7 @@ def bias(q_m):
             q_out[9] = 0
             q_out[8] = q_m[8]
             q_out[0:8] = q_m[0:8]
-            bias.bias = bias.bias + 2 * (not q_m[8]) + one_cnt - zero_cnt
+            bias.bias = bias.bias - 2 * (not q_m[8]) + one_cnt - zero_cnt
     return q_out
 
 
