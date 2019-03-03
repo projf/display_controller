@@ -26,9 +26,9 @@ def tmds(decimal, d):
     Convert d[0:7] to q_m[0:8] as per DVI spec.
     '''
     q_m = [None] * 9
-    one_cnt = sum(d)
-    if one_cnt > 4 or (one_cnt == 4 and d[0] == 0):
-        print("{:3}: XNOR({},".format(decimal, one_cnt), end='')
+    one_cnt_d = sum(d)
+    if one_cnt_d > 4 or (one_cnt_d == 4 and d[0] == 0):
+        print("{:3}: XNOR(".format(decimal), end='')
         q_m[0] = d[0]
         q_m[1] = int(q_m[0] == d[1])
         q_m[2] = int(q_m[1] == d[2])
@@ -39,7 +39,7 @@ def tmds(decimal, d):
         q_m[7] = int(q_m[6] == d[7])
         q_m[8] = 0  # using XNOR == 0
     else:
-        print("{:3}: XOR ({},".format(decimal, one_cnt), end='')
+        print("{:3}: XOR (".format(decimal), end='')
         q_m[0] = d[0]
         q_m[1] = int(q_m[0] ^ d[1])
         q_m[2] = int(q_m[1] ^ d[2])
@@ -61,7 +61,7 @@ def bias(q_m):
     one_cnt = sum(q_m[0:8])
     zero_cnt = 8 - one_cnt
 
-    print("{:2}) ".format(bias.bias), end='')
+    print("{},{:2}) ".format(one_cnt, bias.bias), end='')
     if bias.bias == 0 or one_cnt == 4:
         q_out[9] = int(not q_m[8])
         q_out[8] = q_m[8]
