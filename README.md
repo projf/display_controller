@@ -90,6 +90,26 @@ There is also a _top_ module for the display controller, [demo](../hdl/demo) ver
 * `H_RES` - horizontal test card resolution in pixels 
 * `V_RES` - vertical test card resolution in lines 
 
+
+## TMDS Encoder Model
+The display controller includes a simple [Python model](/display/model/tmds.py) to help with TMDS encoder development. 
+
+There are two steps to TMDS encoding: X(N)ORing the bit together to minimise transitions, and keeping the overall number of 1s and 0s similar to ensure DC balance. The first step depends only on the current input data, so is easy to test. However, balancing depends on the previous values, which makes testing harder. The Python model provides a point of reference and easy way to experiment with the encoder design.
+
+Python output:
+
+    30: XNOR(2, 0, A1) [...] -> [0, 0, 0, 0, 0, 1, 0, 1, 0] -> [...]
+    31: XNOR(6, 4, B1) [...] -> [1, 1, 1, 1, 1, 0, 1, 0, 0] -> [...]
+    32: XOR (3, 0, A0) [...] -> [0, 0, 0, 0, 0, 1, 1, 1, 1] -> [...]
+
+Verilog output:
+
+    30 010100000   2,   0, A1
+    31 001011111   6,   4, B1
+    32 111100000   3,   0, A0
+
+_NB. The Python binary values are LSB first, whereas the Verilog $display is MSB first._
+
 ## Porting
 We strive to create generic HDL designs where possible, however vendor specific components are critical to certain functionality, such as high-speed clock generation. The display controller uses three Xilinx-specific components: all display options use the `MMCM` for clock generation, while TMDS encoding on the FPGA requires `OSERDESE2` and `OBUFDS`. Versions for other manufacturers will be added in due course, but in the meantime the following advice should help with porting:
 
