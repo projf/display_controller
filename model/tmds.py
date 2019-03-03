@@ -60,28 +60,28 @@ def bias(q_m):
     q_out = [None] * 10
     one_cnt = sum(q_m[0:8])
     zero_cnt = 8 - one_cnt
+    option = ''
 
-    print("{},{:2}) ".format(one_cnt, bias.bias), end='')
     if bias.bias == 0 or one_cnt == 4:
         q_out[9] = int(not q_m[8])
         q_out[8] = q_m[8]
         if q_m[8] == 0:
-            print("A  ", end='');
+            print("{},{:2}, A1) ".format(one_cnt, bias.bias), end='')
             q_out[0:8] = [int(not i) for i in q_m[0:8]]
             bias.bias = bias.bias + zero_cnt - one_cnt
         else:
-            print("B  ", end='');
+            print("{},{:2}, A0) ".format(one_cnt, bias.bias), end='')
             q_out[0:8] = q_m[0:8]
             bias.bias = bias.bias + one_cnt - zero_cnt
     else:
-        if (bias.bias > 0 and one_cnt > 4) or (bias.bias < 0 and one_cnt < 4):
-            print("C  ", end='');
+        if (bias.bias > 0 and one_cnt > zero_cnt) or (bias.bias < 0 and one_cnt < zero_cnt):
+            print("{},{:2}, B1) ".format(one_cnt, bias.bias), end='')
             q_out[9] = 1
             q_out[8] = q_m[8]
             q_out[0:8] = [int(not i) for i in q_m[0:8]]
             bias.bias = bias.bias + 2 * q_m[8] + zero_cnt - one_cnt
         else:
-            print("D  ", end='');
+            print("{},{:2}, B0) ".format(one_cnt, bias.bias), end='')
             q_out[9] = 0
             q_out[8] = q_m[8]
             q_out[0:8] = q_m[0:8]
@@ -93,8 +93,8 @@ print("Project F TMDS Encoding Model")
 print("================================")
 print("d[0:7] -> q_m[0:8] -> q_out[0:9]")
 print("LSB First, 8=X(N)OR  9=invert\n")
-print("         1s  B  O   0  1  2  3  4  5  6  7      0  1  2  3  4  5  6  7  8      0  1  2  3  4  5  6  7  8  9")
-print("============================================================================================================")
+print("         1s  B   O   0  1  2  3  4  5  6  7      0  1  2  3  4  5  6  7  8      0  1  2  3  4  5  6  7  8  9")
+print("=============================================================================================================")
 for decimal in range(0,256):
     d = bin_array_8(decimal)
     q_m = tmds(decimal, d)
