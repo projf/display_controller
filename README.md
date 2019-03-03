@@ -56,14 +56,14 @@ There are two different high-level designs depending on whether the FPGA is doin
 6. Differential Signal Output - converts the TMDS data into differential form for output via two FPGA pins
 
 ## Modules
-* **[display_clocks](/display/hdl/display_clocks.v)** - pixel and high-speed clocks for TMDS (includes Xilinx MMCM)
-* **[display_timings](/display/hdl/display_timings.v)** - generates display timings, including horizontal and vertical sync
-* **[dvi_generator](/display/hdl/dvi_generator.v)** - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
-* **[serializer_10to1](/display/hdl/serializer_10to1.v)** - serializes the 10-bit TMDS data (includes Xilinx OSERDESE2)
-* **[test_card](/display/hdl/test_card.v)** - generates a video test card based on provided resolution
-* **[tmds_encoder_dvi](/display/hdl/tmds_encoder_dvi.v)** - encodes 8-bit per colour into 10-bit TMDS values for DVI
+* **[display_clocks](hdl/display_clocks.v)** - pixel and high-speed clocks for TMDS (includes Xilinx MMCM)
+* **[display_timings](hdl/display_timings.v)** - generates display timings, including horizontal and vertical sync
+* **[dvi_generator](hdl/dvi_generator.v)** - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
+* **[serializer_10to1](hdl/serializer_10to1.v)** - serializes the 10-bit TMDS data (includes Xilinx OSERDESE2)
+* **[test_card](hdl/test_card.v)** - generates a video test card based on provided resolution
+* **[tmds_encoder_dvi](hdl/tmds_encoder_dvi.v)** - encodes 8-bit per colour into 10-bit TMDS values for DVI
 
-There is also a _top_ module for the display controller, [demo](../hdl/demo) versions of which are included with this project. When performing TMDS encoding on FPGA the top module makes use of the Xilinx OBUFDS buffer to generate the differential output signals.
+There is also a _top_ module for the display controller, [demo](hdl/demo) versions of which are included with this project. When performing TMDS encoding on FPGA the top module makes use of the Xilinx OBUFDS buffer to generate the differential output signals.
 
 ### Module Parameters
 
@@ -92,7 +92,7 @@ There is also a _top_ module for the display controller, [demo](../hdl/demo) ver
 
 
 ## TMDS Encoder Model
-The display controller includes a simple [Python model](/display/model/tmds.py) to help with TMDS encoder development. 
+The display controller includes a simple [Python model](model/tmds.py) to help with TMDS encoder development. 
 
 There are two steps to TMDS encoding: X(N)ORing the bit together to minimise transitions, and keeping the overall number of 1s and 0s similar to ensure DC balance. The first step depends only on the current input data, so is easy to test. However, balancing depends on the previous values, which makes testing harder. The Python model provides a point of reference and easy way to experiment with the encoder design.
 
