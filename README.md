@@ -100,17 +100,17 @@ By default the Python model encodes all 256 possible 8-bit values in order, but 
 
 Sample Python output:
 
-    30: XNOR(2, 0, A1) [...] -> [0, 0, 0, 0, 0, 1, 0, 1, 0] -> [...]
-    31: XNOR(6, 4, B1) [...] -> [1, 1, 1, 1, 1, 0, 1, 0, 0] -> [...]
-    32: XOR (3, 0, A0) [...] -> [0, 0, 0, 0, 0, 1, 1, 1, 1] -> [...]
+             1s  B   O  76543210    876543210    9876543210
+    =======================================================
+     30: XNOR(2, 0, A1) 00011110 -> 010100000 -> 1001011111
+     31: XNOR(6, 4, B1) 00011111 -> 001011111 -> 1010100000
+     32: XOR (3, 0, A0) 00100000 -> 111100000 -> 0111100000
 
-Sample Verilog output:
+Sample Verilog output (matches the middle Python output column):
 
     30 010100000   2,   0, A1
     31 001011111   6,   4, B1
     32 111100000   3,   0, A0
-
-_NB. The Python binary values are LSB first, whereas the Verilog $display is MSB first._
 
 ## Porting
 We strive to create generic HDL designs where possible, however vendor specific components are critical to certain functionality, such as high-speed clock generation. The display controller uses three Xilinx-specific components: all display options use the `MMCM` for clock generation, while TMDS encoding on the FPGA requires `OSERDESE2` and `OBUFDS`. Versions for other manufacturers will be added in due course, but in the meantime the following advice should help with porting:
