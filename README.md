@@ -136,7 +136,7 @@ Sample output from Verilog TMDS test bench [tmds_encoder_dvi_tb.v](hdl/test/tmds
 
 
 ## Resource Utilization
-The display controller has not been extensively area optimised but is still lightweight:
+The display controller has not been extensively optimized for area but is still lightweight:
 
     Display          LUT     FF
     ---------------------------
