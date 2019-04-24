@@ -1,18 +1,37 @@
 # Project F Display Controller
 
-The Project F display controller is designed to make it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. This design and its documentation are licensed under the MIT License.
+The Project F display controller is designed to make it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. See [Porting](#porting) for information on adapting the design to other FPGAs. This design and its documentation are licensed under the MIT License. 
 
-For tutorials and further information visit https://projectf.io
+For tutorials and further information visit [projectf.io](https://projectf.io).
 
-## Hardware Interface Support
-This design supports VGA, DVI, and HDMI displays. HDMI support is currently via backwards compatibility with DVI. HDMI features, such as audio, will be added in future.
+## Contents
+- [Display Interface Support](#display-interface-support)
+- [Display Resolution Support](#display-resolution-support)
+- [Demos](#demos)
+- [Architecture](#architecture)
+- [Modules](#modules)
+- [TMDS Encoder Model](#tmds-encoder-model)
+- [Porting](#porting)
 
-Two flavours of DVI are available: direct TMDS generation and [Black Mesa Labs (BML) DVI Pmod](https://blackmesalabs.wordpress.com/2017/12/15/bml-hdmi-video-for-fpgas-over-pmod/) with Texas Instruments [TFP410](http://www.ti.com/product/TFP410). Direct TMDS generation on FPGA requires high-frequency clocks and SerDes, but allows full control of the signal including HDMI features. The BML Pmod is restricted to standard DVI features, but allows even tiny FPGAs to support DVI signalling.
+## Display Interface Support
+This design supports displays using, VGA, DVI, and HDMI.
 
-As of February 2019 there is an unresolved issue when using the BML DVI Pmods with HDMI displays: some displays report signal error and show nothing. This issue isn't confined to Project F, but has also been reported by Black Mesa Labs themselves.
+**VGA** support is straightforward; you can see an example in [`display_demo_vga.v`](hdl/demo/display_demo_vga.v). If you're building your own hardware, then [Retro Ramblings](http://retroramblings.net/?p=190) has a good example of creating a register ladder DAC.
 
-## Resolution Support
-The following four display resolutions are tested and included by default (all at 60 Hz):
+**DVI** & **HDMI** use [transition-minimized differential signalling](https://en.wikipedia.org/wiki/Transition-minimized_differential_signaling) (TMDS) to transmit video over high-speed serial links. HDMI provides extra functionality over DVI, including audio support, but all HDMI displays should accept a standard DVI signal without issue. 
+
+The display controller offers two types of TMDS generation: 
+
+* Direct generation on FPGA
+* [Black Mesa Labs (BML) DVI Pmod](https://blackmesalabs.wordpress.com/2017/12/15/bml-hdmi-video-for-fpgas-over-pmod/) using Texas Instruments [TFP410](http://www.ti.com/product/TFP410). 
+
+Direct TMDS generation on FPGA requires high-frequency clocks (745 MHz for 1280x720) and SerDes but allows full control of the signal including HDMI features. HDMI support is currently via backwards compatibility with DVI: any standard HDMI display should accept DVI signals. However, the display controller lacks support for audio or advanced HDMI features at present.
+
+The BML Pmod is restricted to standard DVI features but allows even tiny FPGAs to support DVI signalling. As of February 2019, there is an unresolved issue when using the BML DVI Pmods with HDMI displays: some displays report a signal error and show nothing. This issue isn't confined to Project F but has also been reported by Black Mesa Labs themselves.
+
+
+## Display Resolution Support
+The following four display resolutions are tested and included by default (all at 60 Hz refresh rate):
     
      Resolution  Ratio   Clock     
      640 x  480    4:3   25.20 MHz
@@ -20,9 +39,10 @@ The following four display resolutions are tested and included by default (all a
     1280 x  720   16:9   74.25 MHz     
     1920 x 1080   16:9  148.50 MHz   
 
-You can easily add your own timings for other resolutions.
+You can easily add timings for other resolutions; check out one of the [demos](#demos) for how to do this.
 
 _NB. The canonical clock for 640x480 60Hz is 25.175 MHz, but 25.2 MHz is within VESA spec and easier to generate._
+
 
 ## Demos
 The [demo](hdl/demo) directory includes demos for each of the supported interfaces:
@@ -34,21 +54,22 @@ The [demo](hdl/demo) directory includes demos for each of the supported interfac
 
 You can find the list of required modules for each demo in a comment at the top of its file. You'll also need suitable constraints, such as those in Project F [hardware-support](https://github.com/projf/hardware-support).
 
-You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card`. Comments in the demos provide settings for tested resolutions (see above).
+You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card`. Comments in the demos provide settings for tested [resolutions](#display-resolution-support).
+
 
 ## Architecture
-There are two different high-level designs depending on whether the FPGA is doing TMDS encoding.
+There are two different high-level designs. This section explains the steps used to generate the display signal in both cases.
 
 ### Analogue VGA and BML DVI Pmod
 
-1. Display Clocks - synthesizes the pixel clock, for example 40 MHz for 800x600
+1. Display Clocks - synthesizes the pixel clock, for example, 40 MHz for 800x600
 2. Display Timings - generates the display sync signals and active pixel position
 3. Colour Data - the colour of a pixel, taken from a bitmap, sprite, test card etc.
 4. Parallel Colour Output - external hardware converts this to analogue VGA or TMDS DVI as appropriate
 
 ### TMDS Encoding on FPGA for DVI or HDMI
 
-1. Display Clocks - synthesizes the pixel and SerDes clocks, for example 74.25 and 371.25 MHz for 720p
+1. Display Clocks - synthesizes the pixel and SerDes clocks, for example, 74.25 and 371.25 MHz for 720p
 2. Display Timings - generates the display sync signals and active pixel position
 3. Colour Data - the colour of a pixel, taken from a bitmap, sprite, test card etc.
 4. TMDS Encoder - encodes 8-bit red, green, and blue pixel data into 10-bit TMDS values
@@ -63,7 +84,7 @@ There are two different high-level designs depending on whether the FPGA is doin
 * **[test_card](hdl/test_card.v)** - generates a video test card based on provided resolution
 * **[tmds_encoder_dvi](hdl/tmds_encoder_dvi.v)** - encodes 8-bit per colour into 10-bit TMDS values for DVI
 
-There is also a _top_ module for the display controller, [demo](hdl/demo) versions of which are included with this project. When performing TMDS encoding on FPGA the top module makes use of the Xilinx OBUFDS buffer to generate the differential output signals.
+You also need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces. When performing TMDS encoding on FPGA, the top module makes use of the Xilinx OBUFDS buffer to generate the differential output signals.
 
 ### Module Parameters
 
@@ -94,9 +115,9 @@ There is also a _top_ module for the display controller, [demo](hdl/demo) versio
 ## TMDS Encoder Model
 The display controller includes a simple [Python model](model/tmds.py) to help with TMDS encoder development. 
 
-There are two steps to TMDS encoding: applying XOR or XNOR to the bits to minimise transitions, and keeping the overall number of 1s and 0s similar to ensure DC balance. The first step depends only on the current input value, so is easy to test. However, balancing depends on the previous values, which makes testing harder; this is where the model is particularly useful. 
+There are two steps to TMDS encoding: applying XOR or XNOR to the bits to minimise transitions and keeping the overall number of 1s and 0s similar to ensure DC balance. The first step depends only on the current input value, so it is easy to test. However, balancing depends on the previous values, which makes testing harder; this is where the model is particularly useful. 
 
-By default the Python model encodes all 256 possible 8-bit values in order, but it's easy to change the script to handle other combinations. `A0, A1, B0, or B1` show which of the four balancing options was taken: you can see what they do in the Python or Verilog code.
+By default, the Python model encodes all 256 possible 8-bit values in order, but it's easy to change the script to handle other combinations. `A0, A1, B0, or B1` show which of the four balancing options was taken: you can see what they do in the Python or Verilog code.
 
 Sample Python output:
 
@@ -106,15 +127,16 @@ Sample Python output:
      31: XNOR(6, 4, B1) 00011111 -> 001011111 -> 1010100000
      32: XOR (3, 0, A0) 00100000 -> 111100000 -> 0111100000
 
-Sample Verilog output (matches the middle Python output column):
+Sample output from Verilog TMDS test bench [tmds_encoder_dvi_tb.v](hdl/test/tmds_encoder_dvi_tb.v). It should match the middle column of the Python output:
 
     30 010100000   2,   0, A1
     31 001011111   6,   4, B1
     32 111100000   3,   0, A0
 
+
 ## Porting
-We strive to create generic HDL designs where possible, however vendor specific components are critical to certain functionality, such as high-speed clock generation. The display controller uses three Xilinx-specific components: all display options use the `MMCM` for clock generation, while TMDS encoding on the FPGA requires `OSERDESE2` and `OBUFDS`. Versions for other manufacturers will be added in due course, but in the meantime the following advice should help with porting:
+We strive to create generic HDL designs where possible. However, vendor-specific components are critical to certain functionality, such as high-speed clock generation. The display controller uses three Xilinx-specific components: all display options use the `MMCM` for clock generation, while TMDS encoding on the FPGA requires `OSERDESE2` and `OBUFDS`. Expanded hardware support will be available in future, but in the meantime, we offer the following advice:
 
 * **MMCM** - Mixed-Mode Clock Manager: Replace with the clock or clock synthesizer of your choice, such as PLL. The simplest pixel clock to generate is usually the 40.0 MHz required by 800x600 60 Hz. Some of the pixel clocks are quite hard to generate accurately, which is where the MMCM's support for multiplying and dividing by eighths comes in handy, for example: `74.25 MHz = 100 MHz * 37.125 / 50`. Analogue VGA is relatively tolerant of inaccurate clock frequencies; DVI and HDMI much less so.
-* **OSERDESE2** - SerDes: TMDS requires 10:1 serialization, which is supported by chaining two OSERDESE2 together. This is generally the hardest part of the design to port as FPGAs vary enormously in their SerDes capabilities. If native 10:1 serialization isn't available you can sometimes make use of logic designed for DDR memory or divide serialization into two 5-bit steps. Only needed for on-FPGA TMDS generation.
+* **OSERDESE2** - SerDes: TMDS requires 10:1 serialization, which is supported by chaining two OSERDESE2 together. SerDes is generally the hardest part to port as FPGAs vary enormously in their capabilities. If native 10:1 serialization isn't available you can sometimes make use of logic designed for DDR memory or divide serialization into two 5-bit steps. Only needed for on-FPGA TMDS generation.
 * **OBUFDS** - Differential Signalling: Provided your FPGA has at least four pairs of DS pins you should easily be able to use this design. Only needed for on-FPGA TMDS generation.
