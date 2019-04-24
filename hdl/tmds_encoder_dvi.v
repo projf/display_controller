@@ -40,6 +40,7 @@ module tmds_encoder_dvi(
             + {4'b0,enc_qm[5]} + {4'b0,enc_qm[6]} + {4'b0,enc_qm[7]};
     
     wire signed [4:0] zeros = 5'b01000 - ones;
+    wire signed [4:0] balance = ones - zeros;
 
     // record ongoing DC bias
     reg signed [4:0] bias;
@@ -63,31 +64,31 @@ module tmds_encoder_dvi(
         end
         else  // send pixel colour data (at most 5 transitions)
         begin
-            if (bias == 0 || ones - zeros == 0)  // no prior bias or disparity
+            if (bias == 0 || balance == 0)  // no prior bias or disparity
             begin
                 if (enc_qm[8] == 0)
                 begin
                     $display("\t%d %b %d, %d, A1", i_data, enc_qm, ones, bias);
                     o_tmds[9:0] <= {2'b10, ~enc_qm[7:0]};
-                    bias <= bias + zeros - ones;
+                    bias <= bias - balance;
                 end
                 else begin
                     $display("\t%d %b %d, %d, A0", i_data, enc_qm, ones, bias);
                     o_tmds[9:0] <= {2'b01, enc_qm[7:0]};
-                    bias <= bias + ones - zeros;
+                    bias <= bias + balance;
                 end  
             end
-            else if ((bias > 0 & (ones > zeros)) || (bias < 0 & (ones < zeros)))
+            else if ((bias > 0 & balance > 0) || (bias < 0 & balance < 0))
             begin
                 $display("\t%d %b %d, %d, B1", i_data, enc_qm, ones, bias);
                 o_tmds[9:0] <= {1'b1, enc_qm[8], ~enc_qm[7:0]};
-                bias <= bias + {3'b0, enc_qm[8], 1'b0} + zeros - ones;
+                bias <= bias + {3'b0, enc_qm[8], 1'b0} - balance;
             end
             else
             begin
                 $display("\t%d %b %d, %d, B0", i_data, enc_qm, ones, bias);
                 o_tmds[9:0] <= {1'b0, enc_qm[8], enc_qm[7:0]};
-                bias <= bias - {3'b0, ~enc_qm[8], 1'b0} + ones - zeros;
+                bias <= bias - {3'b0, ~enc_qm[8], 1'b0} + balance;
             end
         end
     end

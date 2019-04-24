@@ -11,6 +11,7 @@ For tutorials and further information visit [projectf.io](https://projectf.io).
 - [Architecture](#architecture)
 - [Modules](#modules)
 - [TMDS Encoder Model](#tmds-encoder-model)
+- [Resource Utilization](#resource-utilization)
 - [Porting](#porting)
 
 ## Display Interface Support
@@ -132,6 +133,21 @@ Sample output from Verilog TMDS test bench [tmds_encoder_dvi_tb.v](hdl/test/tmds
     30 010100000   2,   0, A1
     31 001011111   6,   4, B1
     32 111100000   3,   0, A0
+
+
+## Resource Utilization
+The display controller has not been extensively area optimised but is still lightweight:
+
+    Display          LUT     FF
+    ---------------------------
+    DVI on FPGA      227     70
+    DVI BML 3-bit    144     26
+    DVI BML 24-bit   TBC    TBC
+    VGA              134     26
+
+For comparison an Artix A35T has 20,800 LUT6 and 41,600 FF: even the full TMDS implementation is using just 1% of the LUTs.
+
+_Synthesized using Vivado 2018.3 with default options. Target Xilinx Artix 7._
 
 
 ## Porting
