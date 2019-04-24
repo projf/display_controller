@@ -1,16 +1,16 @@
 # Project F Display Controller
 
-The Project F display controller is designed to make it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. See [Porting](#Porting) for information on adapting the design to other FPGAs. This design and its documentation are licensed under the MIT License. 
+The Project F display controller is designed to make it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. See [Porting](#porting) for information on adapting the design to other FPGAs. This design and its documentation are licensed under the MIT License. 
 
 For tutorials and further information visit [projectf.io](https://projectf.io).
 
 ## Contents
-- [Display Interface Support](#display_interface_support)
-- [Display Resolution Support](#display_resolution_support)
+- [Display Interface Support](#display-interface-support)
+- [Display Resolution Support](#display-resolution-support)
 - [Demos](#demos)
 - [Architecture](#architecture)
 - [Modules](#modules)
-- [TMDS Encoder Model](#tmds_encoder_model)
+- [TMDS Encoder Model](#tmds-encoder-model)
 - [Porting](#porting)
 
 ## Display Interface Support
@@ -54,7 +54,7 @@ The [demo](hdl/demo) directory includes demos for each of the supported interfac
 
 You can find the list of required modules for each demo in a comment at the top of its file. You'll also need suitable constraints, such as those in Project F [hardware-support](https://github.com/projf/hardware-support).
 
-You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card`. Comments in the demos provide settings for tested [resolutions](#display_resolution_support).
+You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card`. Comments in the demos provide settings for tested [resolutions](#display-resolution-support).
 
 
 ## Architecture
