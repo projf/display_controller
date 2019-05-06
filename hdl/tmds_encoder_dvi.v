@@ -78,7 +78,7 @@ module tmds_encoder_dvi(
                     bias <= bias + balance;
                 end  
             end
-            else if ((bias > 0 & balance > 0) || (bias < 0 & balance < 0))
+            else if ((bias > 0 && balance > 0) || (bias < 0 && balance < 0))
             begin
                 $display("\t%d %b %d, %d, B1", i_data, enc_qm, ones, bias);
                 o_tmds[9:0] <= {1'b1, enc_qm[8], ~enc_qm[7:0]};
