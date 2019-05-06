@@ -58,7 +58,7 @@ You can find the list of required modules for each demo in a comment at the top 
 There are also two simple test cards, which the demo modules can use:
 
 * **[test_card](hdl/demo/test_card.v)** - generates a video test card based on provided resolution
-* **[test_card_simple](hdl/demo/test_card_simple.v)** - generates a simple coloured borded based on provided resolution
+* **[test_card_simple](hdl/demo/test_card_simple.v)** - generates a simple coloured border based on provided resolution
 
 You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card` or `test_card_simple`. Comments in the demos provide settings for tested [resolutions](#display-resolution-support).
 
