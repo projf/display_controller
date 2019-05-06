@@ -45,8 +45,8 @@ module display_demo_vga(
     );
 
     // Display Timings
-    wire [12:0] h;                  // horizontal pixel position
-    wire [12:0] v;                  // vertical pixel position
+    wire [15:0] x;                  // horizontal pixel position
+    wire [15:0] y;                  // vertical pixel position
     wire h_sync;                    // horizontal sync
     wire v_sync;                    // vertical sync
     wire de;                        // display enable
@@ -71,8 +71,10 @@ module display_demo_vga(
         .o_vs(v_sync), 
         .o_de(de),
         .o_frame(frame),
-        .o_h(h), 
-        .o_v(v)
+        .o_h(),
+        .o_v(),
+        .o_x(x),
+        .o_y(y)
     );
 
     // Test Card Generation
@@ -82,8 +84,8 @@ module display_demo_vga(
         .V_RES(480)
     ) 
     test_card_inst (
-        .i_x(h),
-        .i_y(v),
+        .i_x(x),
+        .i_y(y),
         .o_red(red),
         .o_green(green),
         .o_blue(blue)

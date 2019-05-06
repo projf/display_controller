@@ -55,7 +55,12 @@ The [demo](hdl/demo) directory includes a demo for each supported interface:
 
 You can find the list of required modules for each demo in a comment at the top of its file. You'll also need suitable constraints, such as those from the Project F [hardware support](https://github.com/projf/hardware-support) repo.
 
-You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card`. Comments in the demos provide settings for tested [resolutions](#display-resolution-support).
+There are also two simple test cards, which the demo modules can use:
+
+* **[test_card](hdl/demo/test_card.v)** - generates a video test card based on provided resolution
+* **[test_card_simple](hdl/demo/test_card_simple.v)** - generates a simple coloured borded based on provided resolution
+
+You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card` or `test_card_simple`. Comments in the demos provide settings for tested [resolutions](#display-resolution-support).
 
 
 ## Architecture
@@ -82,10 +87,10 @@ There are two different high-level designs. This section explains the steps used
 * **[display_timings](hdl/display_timings.v)** - generates display timings, including horizontal and vertical sync
 * **[dvi_generator](hdl/dvi_generator.v)** - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
 * **[serializer_10to1](hdl/serializer_10to1.v)** - serializes the 10-bit TMDS data (includes Xilinx OSERDESE2)
-* **[test_card](hdl/test_card.v)** - generates a video test card based on provided resolution
 * **[tmds_encoder_dvi](hdl/tmds_encoder_dvi.v)** - encodes 8-bit per colour into 10-bit TMDS values for DVI
 
-You also need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces. When performing TMDS encoding on FPGA, the top module makes use of the Xilinx OBUFDS buffer to generate the differential output.
+You need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces. When performing TMDS encoding on FPGA, the top module makes use of the Xilinx OBUFDS buffer to generate the differential output. See [Demos](#demos) for details.
+
 
 ### Module Parameters
 
@@ -136,18 +141,19 @@ Sample output from Verilog TMDS test bench [tmds_encoder_dvi_tb.v](hdl/test/tmds
 
 
 ## Resource Utilization
-The display controller has not been extensively optimized for area but is still lightweight:
+The display controller is lightweight, fitting into even the smallest FPGA. The following figures are for the demo using the simple test card module:
 
-    Display          LUT     FF
+                      Artix-7
+    Demo.            LUT     FF
     ---------------------------
-    DVI on FPGA      227     70
-    DVI BML 3-bit    144     26
+    DVI on FPGA      125     76
+    DVI BML 3-bit     67     32
     DVI BML 24-bit   TBC    TBC
-    VGA              134     26
+    VGA               67     32
 
-For comparison an Artix A35T has 20,800 LUT6 and 41,600 FF: even the full TMDS implementation is using just 1% of the LUTs.
+For reference an Artix A35T has 20,800 LUT6 and 41,600 FF, so even a full TMDS implementation uses well under 1% of the LUTs.
 
-_Synthesized using Vivado 2018.3 with default options. Target Xilinx Artix 7._
+_Synthesized using Vivado 2018.3 with default options._
 
 
 ## Porting

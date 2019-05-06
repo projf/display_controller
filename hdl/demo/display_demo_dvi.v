@@ -51,8 +51,8 @@ module display_demo_dvi(
     );
 
     // Display Timings
-    wire [12:0] h;                  // horizontal pixel position
-    wire [12:0] v;                  // vertical pixel position
+    wire [15:0] x;                  // horizontal screen position
+    wire [15:0] y;                  // vertical screen position
     wire h_sync;                    // horizontal sync
     wire v_sync;                    // vertical sync
     wire de;                        // display enable
@@ -77,8 +77,10 @@ module display_demo_dvi(
         .o_vs(v_sync), 
         .o_de(de),
         .o_frame(frame),
-        .o_h(h), 
-        .o_v(v)
+        .o_h(),
+        .o_v(),
+        .o_x(x),
+        .o_y(y)
     );
 
     // Test Card Generation
@@ -88,8 +90,8 @@ module display_demo_dvi(
         .V_RES(720)
     ) 
     test_card_inst (
-        .i_x(h),
-        .i_y(v),
+        .i_x(x),
+        .i_y(y),
         .o_red(red),
         .o_green(green),
         .o_blue(blue)
@@ -103,9 +105,9 @@ module display_demo_dvi(
         .i_clk_lock(clk_lock),
         .i_rst(rst),
         .i_de(de),
-        .i_data_ch0({8{de & blue}}),
-        .i_data_ch1({8{de & green}}),
-        .i_data_ch2({8{de & red}}),
+        .i_data_ch0({8{blue}}),
+        .i_data_ch1({8{green}}),
+        .i_data_ch2({8{red}}),
         .i_ctrl_ch0({v_sync, h_sync}),
         .i_ctrl_ch1(2'b00),
         .i_ctrl_ch2(2'b00),
