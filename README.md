@@ -89,7 +89,7 @@ There are two different high-level designs. This section explains the steps used
 * **[serializer_10to1](hdl/serializer_10to1.v)** - serializes the 10-bit TMDS data (includes Xilinx OSERDESE2)
 * **[tmds_encoder_dvi](hdl/tmds_encoder_dvi.v)** - encodes 8-bit per colour into 10-bit TMDS values for DVI
 
-You need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces. When performing TMDS encoding on FPGA, the top module makes use of the Xilinx OBUFDS buffer to generate the differential output. See [Demos](#demos) for details.
+You need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces. When performing TMDS encoding on FPGA, the top module makes use of the Xilinx OBUFDS buffer to generate the differential output. See [demos](#demos) for details.
 
 
 ### Module Parameters
@@ -144,7 +144,7 @@ Sample output from Verilog TMDS test bench [tmds_encoder_dvi_tb.v](hdl/test/tmds
 The display controller is lightweight, fitting into even the smallest FPGA. The following figures are for the demo using the simple test card module:
 
                       Artix-7
-    Demo.            LUT     FF
+    Demo             LUT     FF
     ---------------------------
     DVI on FPGA      125     76
     DVI BML 3-bit     67     32
