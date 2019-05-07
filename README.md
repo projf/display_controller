@@ -20,7 +20,7 @@ For tutorials and further information visit [projectf.io](https://projectf.io).
 ## Display Interface Support
 This design supports displays using VGA, DVI, and HDMI.
 
-**VGA** support is straightforward; you can see an example in [`display_demo_vga.v`](hdl/demo/display_demo_vga.v). If you're building your own hardware, then [Retro Ramblings](http://retroramblings.net/?p=190) has a good example of creating a register ladder DAC. If you're looking for a ready-made VGA output, then the [VGA Pmod](https://reference.digilentinc.com/reference/pmod/pmodvga/start) is a good option for around $10.
+**VGA** support is straightforward; you can see an example in the [VGA demo](hdl/demo/display_demo_vga.v). If you're building your own hardware, then [Retro Ramblings](http://retroramblings.net/?p=190) has a good example of creating a register ladder DAC. If you're looking for a ready-made VGA output, then the [VGA Pmod](https://reference.digilentinc.com/reference/pmod/pmodvga/start) is a good option for around $10.
 
 **DVI** & **HDMI** use [transition-minimized differential signalling](https://en.wikipedia.org/wiki/Transition-minimized_differential_signaling) (TMDS) to transmit video over high-speed serial links. HDMI provides extra functionality over DVI, including audio support, but all HDMI displays should accept a standard DVI signal without issue. 
 
@@ -60,10 +60,10 @@ The [demo](hdl/demo) directory includes a demo for each supported interface:
 
 You can find the list of required modules for each demo in a comment at the top of its file. You'll also need suitable constraints, such as those from the Project F [hardware support](https://github.com/projf/hardware-support) repo.
 
-There are also two test cards, which the demo modules can use:
+There are also two test cards that the demo modules can use:
 
-* **[test_card](hdl/demo/test_card.v)** - generates a video test card based on provided resolution
-* **[test_card_simple](hdl/demo/test_card_simple.v)** - generates a simple coloured border based on provided resolution
+* **[Test Card](hdl/demo/test_card.v)** - generates a video test card based on provided resolution
+* **[Test Card Simple](hdl/demo/test_card_simple.v)** - generates a simple coloured border based on provided resolution
 
 You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card` or `test_card_simple`. Comments in the demos provide settings for tested [resolutions](#display-resolution-support).
 
@@ -72,11 +72,11 @@ You can adjust the demo resolution by changing the parameters for `display_clock
 
 There are three modules you need to interface with for full TMDS generation:
 
-* **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS (includes Xilinx MMCM)
+* **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS
 * **[Display Timings](#display-timings)** ([hdl](/hdl/display_timings.v)) - generates display timings, including horizontal and vertical sync
 * **[DVI Generator](#dvi-generator)** ([hdl](/hdl/dvi_generator.v)) - encodes data with TMDS then serializes it to create a DVI signal
 
-If you're generating VGA or using DVI/HDMI hardware that includes its own TMDS encoder you don't need `dvi_generator`.
+If you're generating VGA or using DVI/HDMI hardware that includes its own TMDS encoder you don't need the DVI generator.
 
 You need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces.
 
@@ -87,7 +87,7 @@ Details on module interfaces can be found in the [modules](doc/modules.md) doc.
 
 If it isn't tested, it doesn't work. Project F tests its designs in simulation and on real hardware. For the display controller you can use the included [test benches](hdl/test) and [Python TMDS model](#tmds-encoder-model) to exercise the design.
 
-We haven't formally verified the design yet, but plan to do this for the display timings and TMDS encoder during 2019. If you're interested in learning more about formal verification, check out Clifford Wolf's [Formal Verification with SymbiYosys and Yosys-SMTBMC deck](http://www.clifford.at/papers/2017/smtbmc-sby/).
+We haven't formally verified the design yet, but plan to do this for the display timings and TMDS encoder during 2019. If you're interested in learning more about formal verification, check out Clifford Wolf's [Formal Verification with SymbiYosys and Yosys-SMTBMC](http://www.clifford.at/papers/2017/smtbmc-sby/).
 
 
 ## TMDS Encoder Model
