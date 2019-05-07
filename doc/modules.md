@@ -16,7 +16,7 @@ See [README](/README.md) for more documentation.
 
 ## Display Clocks
 
-Timing is everything when it comes to working with screens. Everything marches in step with the pixel clock: we need to generate this before we can do anything else. For example, 1280x720p60 uses a pixel clock of 74.25 MHz, which means each pixel is 13.5 ns long. This module generates a high-quality pixel clock using the mixed-mode clock manager (MMCM). When doing our own SerDes, we also need a 5x pixel clock; we provide this too. ([display_clocks.v](/hdl/display_clocks.v))
+Timing is everything when it comes to working with screens. Everything marches in step with the pixel clock: we need to generate this before we can do anything else. For example, 1280x720p60 uses a pixel clock of 74.25 MHz, which means each pixel is 13.5 ns long. This module generates a high-quality pixel clock using the mixed-mode clock manager (MMCM). When doing our own TMDS SerDes we also need a 5x pixel clock, which this module also generates. ([display_clocks.v](/hdl/display_clocks.v))
 
 ### Inputs
 
