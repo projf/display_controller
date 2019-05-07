@@ -2,7 +2,7 @@
 
 The Project F display controller makes it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. This design and its documentation are licensed under the MIT License.
 
-See [modules](doc/modules.md) for the interfaces and parameters of the display controller modules. The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. If you want advice on adapting this design to other FPGAs then take a look at [porting](doc/porting.md).
+To get started take a look at the [demos](#demos) then read [modules](doc/modules.md) for the display controller interfaces and parameters. The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. If you want advice on adapting this design to other FPGAs then take a look at [porting](doc/porting.md).
 
 For tutorials and further information visit [projectf.io](https://projectf.io).
 
