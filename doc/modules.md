@@ -2,6 +2,8 @@
 
 The display controller consists of five core modules. This document describes the interfaces for the three you interact with: `display_clocks`, `display_timings` and `dvi_generator`. The other two modules are used internally by `dvi_generator`. You can see examples of these modules being used in the [demos](/hdl/demo) and [test benches](/hdl/test).
 
+The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. If you want advice on adapting this design to other FPGAs then take a look at [porting](/doc/porting.md).
+
 See [README](/README.md) for more documentation.
 
 
@@ -35,8 +37,7 @@ There are two different high-level designs depending on whether you need to do T
 
 
 ## Display Clocks
-
-Timing is everything when it comes to working with screens. Everything marches in step with the pixel clock: we need to generate this before we can do anything else. For example, 1280x720p60 uses a pixel clock of 74.25 MHz, which means each pixel is 13.5 ns long. This module generates a high-quality pixel clock using the mixed-mode clock manager (MMCM). When doing our own TMDS SerDes we also need a 5x pixel clock, which this module also generates. ([display_clocks.v](/hdl/display_clocks.v))
+Timing is everything when it comes to working with screens: everything marches in step with the pixel clock. Pixel clocks are typically in the range 25-165 MHz for SD and HD resolutions, for example 1280x720p60 uses a pixel clock of 74.25 MHz. If our pixel clock deviates by more than 0.5% it'll be out of Vesa spec and will likely fail to display. This module generates a high-quality pixel clock using the mixed-mode clock manager (MMCM). When doing our own TMDS SerDes we also need a 5x pixel clock, which this module also generates. ([display_clocks.v](/hdl/display_clocks.v))
 
 ### Inputs
 
