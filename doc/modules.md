@@ -72,10 +72,10 @@ The pixel clock must be suitable for the timings given in the parameters (see di
 * `o_vs` - vertical sync
 * `o_de` - display enable: high during active video
 * `o_frame` - high for one tick at the start of each frame
-* `o_h` - horizontal beam position (including blanking)
-* `o_v` - vertical beam position (including blanking)
-* `o_x` - horizontal screen position (active pixels)
-* `o_y` - vertical screen position (active pixels)
+* `o_h [15:0]` - horizontal beam position (including blanking)
+* `o_v [15:0]` - vertical beam position (including blanking)
+* `o_x [15:0]` - horizontal screen position (active pixels)
+* `o_y [15:0]` - vertical screen position (active pixels)
 
 The positional outputs `(h,v)` and `(x,y)` allow you to determine the current pixel AKA "beam position". The values provided by `h` & `v `include the blanking interval, while `x` & `y` only include valid on screen positions. For simple drawing or bitmap display you can use `(x,y)` and safely ignore `(h,v)`. However, if you're doing calculations in real time "racing the beam", then you'll want to perform actions in the blanking interval, which is where (h,v) comes in. 
 
@@ -104,10 +104,38 @@ The [demos](/hdl/demo) modules include appropriate parameters for four common re
 
 
 ## DVI Generator
-The ([dvi_generator.v](/hdl/dvi_generator.v))
+The DVI generator has many inputs, but is straightforward to use. You hook it up to the display clocks and display timings then add your pixel colour data. ([dvi_generator.v](/hdl/dvi_generator.v))
 
-_Details being added..._
+DVI generator instantiates two other modules to do the actual work: one for [TMDS encoding](/hdl/tmds_encoder_dvi.v) and the other for [10:1 serialization](/hdl/serializer_10to1.v). The TMDS encoder has a [Python model](/README.md#tmds-encoder-model) to aid with development and testing.
 
-* **[serializer_10to1](/hdl/serializer_10to1.v)** - serializes the 10-bit TMDS data
-* **[tmds_encoder_dvi](/hdl/tmds_encoder_dvi.v)** - encodes 8-bit per colour into 10-bit TMDS values for DVI
+### Inputs
 
+* `i_pix_clk` - pixel clock ([display clocks](#display-clocks) provides this)
+* `i_pix_clk_5x` - 5 x pixel clock for DDR serialization ([display clocks](#display-clocks) provides this)
+* `i_clk_lock` - clock locked? (active high) ([display clocks](#display-clocks) provides this)
+* `i_rst` - reset (active high)
+* `i_de` - display enable ([display timings](/hdl/display_timings.v) provides this)
+* `i_data_ch0 [7:0]` - 8-bit blue colour data (TMDS channel 0)
+* `i_data_ch1 [7:0]` - 8-bit green colour data (TMDS channel 1)
+* `i_data_ch2 [7:0]` - 8-bit red colour data (TMDS channel 2)
+* `i_ctrl_ch0 [1:0]` - channel 0 control data, set to: `{v_sync, h_sync}` from [display timings](/hdl/display_timings.v) 
+* `i_ctrl_ch1 [1:0]` - channel 1 control data, set to `2'b00`
+* `i_ctrl_ch2 [1:0]` - channel 2 control data, set to `2'b00`
+
+### Outputs
+
+The output is the four TMDS encoded serial channels ready for output as differential signals:
+
+* `o_tmds_ch0_serial` - channel 0 - serial TMDS
+* `o_tmds_ch1_serial` - channel 1 - serial TMDS
+* `o_tmds_ch2_serial` - channel 2 - serial TMDS
+* `o_tmds_chc_serial` - channel clock - serial TMDS
+
+You can use these signals with `OBUFDS`, for example:
+
+    OBUFDS #(.IOSTANDARD("TMDS_33")) 
+        tmds_buf_ch0 (.I(tmds_ch0_serial), .O(hdmi_tx_p[0]), .OB(hdmi_tx_n[0]));
+
+Where `hdmi_tx_p[0]` and `hdmi_tx_n[0]` are the differential output pins for channel 0.
+
+You can see an example of this in the [DVI TMDS Demo](hdl/demo/display_demo_dvi.v).
