@@ -55,8 +55,8 @@ The output clocks are calculated as follows:
 
 For example, 720p60:
 
-    74.25 MHz = (100 MHz * 37.125 / 5) / 10
-    371.25 MHz = (100 MHz * 37.125 / 5) / 2
+     74.25 MHz = (100 MHz * 37.125 / 5) / 10
+    371.25 MHz = (100 MHz * 37.125 / 5) /  2
 
 The [demos](/hdl/demo) modules include appropriate parameters for four common pixel clock to get you started.
 
@@ -82,13 +82,13 @@ The pixel clock must be suitable for the timings given in the parameters (see di
 * `o_x` - horizontal screen position (active pixels)
 * `o_y` - vertical screen position (active pixels)
 
-The positional outputs `(h,v)` and `(x,y)` allow you to determine the current pixel AKA "beam position". The values provided by `h` & `v `include the blanking interval, while `x` & `y` only include valid on screen positions. For simple drawing or bitmap display you can use `(x,y)` and safely ignore `(h,v)`. However, if you're doing calculations in real time "racing the beam", then you'll want to perform actions in the blanking interval, which is where (h,v) comes in.
+The positional outputs `(h,v)` and `(x,y)` allow you to determine the current pixel AKA "beam position". The values provided by `h` & `v `include the blanking interval, while `x` & `y` only include valid on screen positions. For simple drawing or bitmap display you can use `(x,y)` and safely ignore `(h,v)`. However, if you're doing calculations in real time "racing the beam", then you'll want to perform actions in the blanking interval, which is where (h,v) comes in. 
 
-The following sketch shows how (x,y) relates to (h,v) for 1280x720p60:
+Project F considers blanking intervals to occur _before_ active pixels. At the start of a frame (indicated by the `o_frame` signal) you have the blanking intervals in which to work before active pixel drawing occurs. The following sketch this for 1280x720p60 (other resolutions work in the same way):
 
 ![](display-controller-hv-xy.jpg?raw=true "")
 
-NB. 'x' and 'y' are 0 during the blanking interval.
+NB. `x` and `y` are 0 during the blanking interval.
 
 Horizontal and vertical sync may be active high or low, depending on the display mode. This is controlled using the `H_POL` and `V_POL` parameters (below).
 
