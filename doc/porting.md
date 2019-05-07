@@ -1,4 +1,4 @@
-# Porting the Project F Display Controller 
+# Porting the Display Controller 
 
 We strive to create generic HDL designs where possible. However, vendor-specific components are critical to certain functionality, such as high-speed clock generation. The display controller uses three Xilinx-specific components: all display options use the `MMCM` for clock generation, while TMDS encoding on the FPGA requires `OSERDESE2` and `OBUFDS`. Expanded hardware support will be available in future, but in the meantime, we offer the following advice:
 

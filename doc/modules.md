@@ -1,4 +1,4 @@
-# Project F Display Controller Modules
+# Display Controller Modules
 
 _Work in progress..._
 
