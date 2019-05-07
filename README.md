@@ -26,7 +26,7 @@ The display controller offers two types of TMDS generation:
 * Direct generation on FPGA
 * [Black Mesa Labs DVI Pmod](https://blackmesalabs.wordpress.com/2017/12/15/bml-hdmi-video-for-fpgas-over-pmod/)  
 
-Direct TMDS generation on FPGA requires high-frequency clocks (742.5 MHz for 1280x720) and SerDes but allows full control of the signal including HDMI features. HDMI support is currently via backwards compatibility with DVI: any standard HDMI display should accept DVI signals. However, this display controller lacks support for audio or advanced HDMI features at present.
+Direct TMDS generation on FPGA requires high-frequency clocks (742.5 MHz for 720p60) and SerDes but allows full control of the signal including HDMI features. HDMI support is currently via backwards compatibility with DVI: any standard HDMI display should accept DVI signals. However, this display controller lacks support for audio or advanced HDMI features at present.
 
 The Black Mesa Labs (BML) Pmod is based on the Texas Instruments [TFP410](http://www.ti.com/product/TFP410). The Pmod is restricted to standard DVI features but allows even tiny FPGAs to support DVI signalling. As of February 2019, there is an unresolved issue when using a BML DVI Pmod with HDMI displays: some displays report a signal error and show nothing. This issue isn't confined to Project F but has also been reported by Black Mesa Labs themselves.
 
@@ -35,14 +35,16 @@ The Black Mesa Labs (BML) Pmod is based on the Texas Instruments [TFP410](http:/
 The following four display resolutions are tested and included by default (all at 60 Hz refresh rate):
     
      Resolution  Ratio   Clock     
-     640 x  480    4:3   25.20 MHz
+     640 x  480    4:3   25.20 MHz [1]
      800 x  600    4:3   40.00 MHz
     1280 x  720   16:9   74.25 MHz     
-    1920 x 1080   16:9  148.50 MHz   
+    1920 x 1080   16:9  148.50 MHz [2]  
 
-You can easily add timings for other resolutions; see [demos](#demos) for how to do this.
+You can easily add timings for other resolutions; see [demos](#demos) for how to do this. 
 
-_NB. The canonical clock for 640x480 60Hz is 25.175 MHz, but 25.2 MHz is within VESA spec and easier to generate._
+_[1] The canonical clock for 640x480 60Hz is 25.175 MHz, but 25.2 MHz is within VESA spec and easier to generate._
+
+_[2] The TMDS clock for 1080p60 is 1,485 MHz, which is out of spec for Xilinx 7 series FPGAs. However, it does work, even on the slowest -1 speed grade, provided the run is short or uses a buffer such as that found on the Nexys Video._
 
 
 ## Demos
@@ -141,7 +143,7 @@ Sample output from Verilog TMDS test bench [tmds_encoder_dvi_tb.v](hdl/test/tmds
 
 
 ## Resource Utilization
-The display controller is lightweight, fitting into even the smallest FPGA. The following figures are for the demo using the simple test card module:
+The display controller is lightweight, fitting into even the smallest FPGA: 
 
                       Artix-7
     Demo             LUT     FF
@@ -153,7 +155,7 @@ The display controller is lightweight, fitting into even the smallest FPGA. The 
 
 For reference an Artix A35T has 20,800 LUT6 and 41,600 FF, so even a full TMDS implementation uses well under 1% of the LUTs.
 
-_Synthesized using Vivado 2018.3 with default options._
+_Values are for demos using the simple test card module. Synthesized using Vivado 2018.3 with default options._
 
 
 ## Porting
