@@ -46,7 +46,7 @@ You can easily add timings for other resolutions; see [demos](#demos) for how to
 
 _[1] The canonical clock for 640x480 60Hz is 25.175 MHz, but 25.2 MHz is within VESA spec and easier to generate._
 
-_[2] The TMDS clock for 1080p60 is 1,485 MHz, which is out of spec for Xilinx 7 series FPGAs. However, it does work, even on the slowest -1 speed grade, provided the run is short or uses a buffer such as that found on the Nexys Video._
+_[2] The TMDS clock for 1080p60 is 1.485 GHz, which is out of spec for Xilinx 7 series FPGAs. However, 1080p60 does work, even on the slowest Artix speed grade, provided the traces are short or a TMDS buffer is used. This has been successfully tested on the Nexys Video, which uses the TMDS141._
 
 
 ## Demos
