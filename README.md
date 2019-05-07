@@ -20,7 +20,7 @@ For tutorials and further information visit [projectf.io](https://projectf.io).
 ## Display Interface Support
 This design supports displays using VGA, DVI, and HDMI.
 
-**VGA** support is straightforward; you can see an example in [`display_demo_vga.v`](hdl/demo/display_demo_vga.v). If you're building your own hardware, then [Retro Ramblings](http://retroramblings.net/?p=190) has a good example of creating a register ladder DAC. If you're looking for a ready-made VGA output then the [VGA Pmod](https://reference.digilentinc.com/reference/pmod/pmodvga/start) is a good option for around $10.
+**VGA** support is straightforward; you can see an example in [`display_demo_vga.v`](hdl/demo/display_demo_vga.v). If you're building your own hardware, then [Retro Ramblings](http://retroramblings.net/?p=190) has a good example of creating a register ladder DAC. If you're looking for a ready-made VGA output, then the [VGA Pmod](https://reference.digilentinc.com/reference/pmod/pmodvga/start) is a good option for around $10.
 
 **DVI** & **HDMI** use [transition-minimized differential signalling](https://en.wikipedia.org/wiki/Transition-minimized_differential_signaling) (TMDS) to transmit video over high-speed serial links. HDMI provides extra functionality over DVI, including audio support, but all HDMI displays should accept a standard DVI signal without issue. 
 
@@ -47,7 +47,7 @@ You can easily add timings for other resolutions; see [demos](#demos) for how to
 
 _[1] The canonical clock for 640x480 60Hz is 25.175 MHz, but 25.2 MHz is within VESA spec and easier to generate._
 
-_[2] The TMDS clock for 1080p60 is 1.485 GHz, which is out of spec for Xilinx 7 series FPGAs. However, 1080p60 does work, even on the slowest Artix speed grade, provided the traces are short or a TMDS buffer is used. This has been successfully tested on the Nexys Video, which uses the TMDS141._
+_[2] The TMDS clock for 1080p60 is 1.485 GHz, which is out of spec for Xilinx 7 series FPGAs. However, 1080p60 does work, even on the slowest Artix speed grade, provided the traces are short, or a TMDS buffer is used. 1080p60 has been successfully tested on the Nexys Video, which uses the TMDS141._
 
 
 ## Demos
@@ -60,7 +60,7 @@ The [demo](hdl/demo) directory includes a demo for each supported interface:
 
 You can find the list of required modules for each demo in a comment at the top of its file. You'll also need suitable constraints, such as those from the Project F [hardware support](https://github.com/projf/hardware-support) repo.
 
-There are also two simple test cards, which the demo modules can use:
+There are also two test cards, which the demo modules can use:
 
 * **[test_card](hdl/demo/test_card.v)** - generates a video test card based on provided resolution
 * **[test_card_simple](hdl/demo/test_card_simple.v)** - generates a simple coloured border based on provided resolution
@@ -85,7 +85,7 @@ Details on module interfaces can be found in the [modules](doc/modules.md) doc.
 
 ## Testing
 
-If it isn't tested it doesn't work. Project F tests its designs in simulation and on real hardware. For the display controller you can use the included [test benches](hdl/test) and [Python TMDS model](#tmds-encoder-model) to exercise the design.
+If it isn't tested, it doesn't work. Project F tests its designs in simulation and on real hardware. For the display controller you can use the included [test benches](hdl/test) and [Python TMDS model](#tmds-encoder-model) to exercise the design.
 
 We haven't formally verified the design yet, but plan to do this for the display timings and TMDS encoder during 2019. If you're interested in learning more about formal verification, check out Clifford Wolf's [Formal Verification with SymbiYosys and Yosys-SMTBMC deck](http://www.clifford.at/papers/2017/smtbmc-sby/).
 
@@ -93,9 +93,9 @@ We haven't formally verified the design yet, but plan to do this for the display
 ## TMDS Encoder Model
 The display controller includes a simple [Python model](model/tmds.py) to help with TMDS encoder development. 
 
-There are two steps to TMDS encoding: applying XOR or XNOR to the bits to minimise transitions and keeping the overall number of 1s and 0s similar to ensure DC balance. The first step depends only on the current input value, so it is easy to test. However, balancing depends on the previous values, which makes testing harder; this is where the model is particularly useful. 
+There are two steps to TMDS encoding: applying XOR or XNOR to the bits to minimize transitions and keeping the overall number of 1s and 0s similar to ensure DC balance. The first step depends only on the current input value, so it is easy to test. However, balancing depends on the previous values, which makes testing harder; this is where the model is particularly useful. 
 
-By default, the Python model encodes all 256 possible 8-bit values in order, but it's easy to change the script to handle other combinations. `A0, A1, B0, or B1` show which of the four balancing options was taken: you can see what they do in the Python or Verilog code.
+By default, the Python model encodes all 256 possible 8-bit values in order, but it's easy to change the script to handle other combinations. `A0, A1, B0, or B1` show which of the four balancing options was taken: you can see what they do in the [Python source](model/tmds.py) or [Verilog design](/hdl/tmds_encoder_dvi.v).
 
 Sample Python output:
 
@@ -111,7 +111,7 @@ Sample output from [Verilog TMDS test bench](hdl/test/tmds_encoder_dvi_tb.v); it
     31 001011111   6,   4, B1
     32 111100000   3,   0, A0
 
-You can also see full output from the [Python model](model/tmds-test-python.txt) and [Verilog implementation](model/tmds-test-verilog.txt) for comparison.
+You can also see the full output from the [Python model](model/tmds-test-python.txt) and [Verilog implementation](model/tmds-test-verilog.txt) for comparison.
 
 
 ## Resource Utilization
