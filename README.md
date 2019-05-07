@@ -126,7 +126,7 @@ Sample Python output:
      31: XNOR(6, 4, B1) 00011111 -> 001011111 -> 1010100000
      32: XOR (3, 0, A0) 00100000 -> 111100000 -> 0111100000
 
-Sample output from Verilog TMDS test bench [tmds_encoder_dvi_tb.v](hdl/test/tmds_encoder_dvi_tb.v). It should match the middle column of the Python output:
+Sample output from [Verilog TMDS test bench](hdl/test/tmds_encoder_dvi_tb.v); it should match the middle column of the Python output:
 
     30 010100000   2,   0, A1
     31 001011111   6,   4, B1
