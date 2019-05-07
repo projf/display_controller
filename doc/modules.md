@@ -1,18 +1,38 @@
 # Display Controller Modules
 
-The display controller is a set of five core modules. This document explains their interfaces and parameters for the three you interact with: `display_clocks`, `display_timings` and `dvi_generator`. The other two modules are used by `dvi_generator`.
+The display controller consists of five core modules. This document describes the interfaces for the three you interact with: `display_clocks`, `display_timings` and `dvi_generator`. The other two modules are used internally by `dvi_generator`. You can see examples of these modules being used in the [demos](/hdl/demo) and [test benches](/hdl/test).
 
-See [architecture](/README.md#Architecture) for an overview of the two different signal paths.
-
-You can see examples of these modules being used in the [demos](/hdl/demo) and [test benches](/hdl/test).
 See [README](/README.md) for more documentation.
 
 
 ## Contents
 
-* **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS 
-* **[Display Timings](#display-timings)** ([hdl](/hdl/display_timings.v)) - generates display timings, including horizontal and vertical sync
-* **[DVI Generator](#dvi-generator)** ([hdl](/hdl/dvi_generator.v)) - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
+- **[Architecture](#architecture)**
+- **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS 
+- **[Display Timings](#display-timings)** ([hdl](/hdl/display_timings.v)) - generates display timings, including horizontal and vertical sync
+- **[DVI Generator](#dvi-generator)** ([hdl](/hdl/dvi_generator.v)) - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
+
+
+## Architecture
+There are two different high-level designs depending on whether you need to do TMDS encoding on the FPGA. 
+
+### TMDS Encoding on FPGA for DVI or HDMI
+
+1. [Display Clocks](#display-clocks) - synthesizes the pixel and SerDes clocks, for example, 74.25 and 371.25 MHz for 720p
+2. [Display Timings](#display-timings) - generates the display sync signals and active pixel position
+3. Colour Data - the colour of a pixel, taken from a bitmap, sprite, test card etc.
+4. [DVI Generator](#dvi-generator)
+    1. TMDS Encoder - encodes 8-bit red, green, and blue pixel data into 10-bit TMDS values
+    2. 10:1 Serializer - converts parallel 10-bit TMDS value into serial form
+6. Differential Signal Output - converts the TMDS data into differential form for output via two FPGA pins
+
+### Analogue VGA and BML DVI Pmod
+
+1. [Display Clocks](#display-clocks) - synthesizes the pixel clock, for example, 40 MHz for 800x600
+2. [Display Timings](#display-timings) - generates the display sync signals and active pixel position
+3. Colour Data - the colour of a pixel, taken from a bitmap, sprite, test card etc.
+4. Parallel Colour Output - external hardware converts this to analogue VGA or TMDS DVI as appropriate
+
 
 ## Display Clocks
 
@@ -136,6 +156,6 @@ You can use these signals with `OBUFDS`, for example:
     OBUFDS #(.IOSTANDARD("TMDS_33")) 
         tmds_buf_ch0 (.I(tmds_ch0_serial), .O(hdmi_tx_p[0]), .OB(hdmi_tx_n[0]));
 
-Where `hdmi_tx_p[0]` and `hdmi_tx_n[0]` are the differential output pins for channel 0.
+Where `hdmi_tx_p[0]` and `hdmi_tx_n[0]` are the differential output pins for TMDS channel 0.
 
 You can see an example of this in the [DVI TMDS Demo](hdl/demo/display_demo_dvi.v).
