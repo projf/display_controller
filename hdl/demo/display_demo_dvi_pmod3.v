@@ -27,7 +27,6 @@ module display_demo_dvi_pmod3(
     
     // Display Clocks
     wire pix_clk;                   // pixel clock
-    wire pix_clk_5x;                // 5x clock for 10:1 DDR SerDes
     wire clk_lock;                  // clock locked?
 
     display_clocks #(               // 640x480  800x600 1280x720 1920x1080
@@ -42,7 +41,7 @@ module display_demo_dvi_pmod3(
        .i_clk(CLK), 
        .i_rst(rst), 
        .o_clk_1x(pix_clk), 
-       .o_clk_5x(pix_clk_5x),
+       .o_clk_5x(),                 // 5x clock not needed for VGA 
        .o_locked(clk_lock)
     );
 
