@@ -7,6 +7,7 @@ To get started take a look at the [demos](#demos) then read [modules](doc/module
 For tutorials and further information visit [projectf.io](https://projectf.io).
 
 ## Contents
+
 - [Display Interface Support](#display-interface-support)
 - [Display Resolution Support](#display-resolution-support)
 - [Demos](#demos)
@@ -88,11 +89,14 @@ There are two different high-level designs. This section explains the steps used
 
 
 ## Modules
+
+There are three modules you need to interface with for full TMDS generation:
+
 * **[display_clocks](hdl/display_clocks.v)** - pixel and high-speed clocks for TMDS (includes Xilinx MMCM)
 * **[display_timings](hdl/display_timings.v)** - generates display timings, including horizontal and vertical sync
 * **[dvi_generator](hdl/dvi_generator.v)** - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
-* **[serializer_10to1](hdl/serializer_10to1.v)** - serializes the 10-bit TMDS data (includes Xilinx OSERDESE2)
-* **[tmds_encoder_dvi](hdl/tmds_encoder_dvi.v)** - encodes 8-bit per colour into 10-bit TMDS values for DVI
+
+If you're generating VGA or using DVI/HDMI hardware that includes its own TMDS encoder you don't need `dvi_generator`.
 
 You need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces. When performing TMDS encoding on FPGA, the top module makes use of the Xilinx OBUFDS buffer to generate the differential output. See [demos](#demos) for details.
 
