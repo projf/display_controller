@@ -2,6 +2,8 @@
 
 _Work in progress..._
 
+See [README](/README.md) for other documentation.
+
 ## Summary
 * **[display_clocks](hdl/display_clocks.v)** - pixel and high-speed clocks for TMDS (includes Xilinx MMCM)
 * **[display_timings](hdl/display_timings.v)** - generates display timings, including horizontal and vertical sync

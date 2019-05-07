@@ -1,9 +1,10 @@
-# Project F Display Controller
+# Project F Display Controller 
 
-The Project F display controller makes it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. See [porting](#porting) for information on adapting the design to other FPGAs. This design and its documentation are licensed under the MIT License.
+The Project F display controller makes it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. This design and its documentation are licensed under the MIT License.
 
-The [modules](doc/modules.md) doc describes the interfaces and parameters of the display controller modules. For tutorials and further information visit [projectf.io](https://projectf.io).
+See [modules](doc/modules.md) for the interfaces and parameters of the display controller modules. The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. If you want advice on adapting this design to other FPGAs then take a look at [porting](doc/porting.md).
 
+For tutorials and further information visit [projectf.io](https://projectf.io).
 
 ## Contents
 - [Display Interface Support](#display-interface-support)
@@ -13,7 +14,6 @@ The [modules](doc/modules.md) doc describes the interfaces and parameters of the
 - [Modules](#modules)
 - [TMDS Encoder Model](#tmds-encoder-model)
 - [Resource Utilization](#resource-utilization)
-- [Porting](#porting)
 
 
 ## Display Interface Support
@@ -136,10 +136,3 @@ For reference an Artix A35T has 20,800 LUT6 and 41,600 FF, so even a full TMDS i
 
 _Values are for demos using the simple test card module. Synthesized using Vivado 2018.3 with default options._
 
-
-## Porting
-We strive to create generic HDL designs where possible. However, vendor-specific components are critical to certain functionality, such as high-speed clock generation. The display controller uses three Xilinx-specific components: all display options use the `MMCM` for clock generation, while TMDS encoding on the FPGA requires `OSERDESE2` and `OBUFDS`. Expanded hardware support will be available in future, but in the meantime, we offer the following advice:
-
-* **MMCM** - Mixed-Mode Clock Manager: Replace with the clock or clock synthesizer of your choice, such as PLL. The simplest pixel clock to generate is usually the 40.0 MHz required by 800x600 60 Hz. Some of the pixel clocks are quite hard to generate accurately, which is where the MMCM's support for multiplying and dividing by eighths comes in handy, for example: `74.25 MHz = 100 MHz * 37.125 / 50`. Analogue VGA is relatively tolerant of inaccurate clock frequencies; DVI and HDMI much less so.
-* **OSERDESE2** - SerDes: TMDS requires 10:1 serialization, which is supported by chaining two OSERDESE2 together. SerDes is generally the hardest part to port as FPGAs vary enormously in their capabilities. If native 10:1 serialization isn't available you can sometimes make use of logic designed for DDR memory or divide serialization into two 5-bit steps. Only needed for on-FPGA TMDS generation.
-* **OBUFDS** - Differential Signalling: Provided your FPGA has at least four pairs of DS pins you should easily be able to use this design. Only needed for on-FPGA TMDS generation.
