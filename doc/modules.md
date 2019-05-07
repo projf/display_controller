@@ -16,7 +16,7 @@ See [README](/README.md) for more documentation.
 
 ## Display Clocks
 
-Timing is everything when it comes to working with screens. Everything marches in step with the pixel clock: we need to generate this before we can do anything else. For example, 1280x720p60 uses a pixel clock of 74.25 MHz, which means each pixel is 13.5 ns long. This module generates a high-quality pixel clock using the mixed-mode clock manager (MMCM). When doing our own SerDes, we also need a 5x pixel clock; we provide this too.
+Timing is everything when it comes to working with screens. Everything marches in step with the pixel clock: we need to generate this before we can do anything else. For example, 1280x720p60 uses a pixel clock of 74.25 MHz, which means each pixel is 13.5 ns long. This module generates a high-quality pixel clock using the mixed-mode clock manager (MMCM). When doing our own SerDes, we also need a 5x pixel clock; we provide this too. ([display_clocks.v](/hdl/display_clocks.v))
 
 ### Inputs
 
@@ -57,7 +57,7 @@ The [demos](/hdl/demo) modules include appropriate parameters for four common pi
 
 
 ## Display Timings
-The heart of the display controller is the display timings generator. This turns timing parameters into appropriately timed sync pulses and provides the current screen co-ordinates.
+The heart of the display controller is the display timings generator. This turns timing parameters into appropriately timed sync pulses and provides the current screen co-ordinates. ([display_timings.v](/hdl/display_timings.v))
 
 ### Inputs
 
@@ -104,6 +104,7 @@ The [demos](/hdl/demo) modules include appropriate parameters for four common re
 
 
 ## DVI Generator
+The ([dvi_generator.v](/hdl/dvi_generator.v))
 
 _Details being added..._
 
