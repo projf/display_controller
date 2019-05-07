@@ -2,7 +2,8 @@
 
 The Project F display controller makes it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. See [porting](#porting) for information on adapting the design to other FPGAs. This design and its documentation are licensed under the MIT License.
 
-For tutorials and further information visit [projectf.io](https://projectf.io).
+The [modules](doc/modules.md) doc describes the interfaces and parameters of the display controller modules. For tutorials and further information visit [projectf.io](https://projectf.io).
+
 
 ## Contents
 - [Display Interface Support](#display-interface-support)
@@ -95,30 +96,7 @@ There are two different high-level designs. This section explains the steps used
 
 You need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces. When performing TMDS encoding on FPGA, the top module makes use of the Xilinx OBUFDS buffer to generate the differential output. See [demos](#demos) for details.
 
-### Module Parameters
-
-#### Display Clocks
-* `MULT_MASTER` - multiplication for both output clocks
-* `DIV_MASTER` - division for both output clocks
-* `DIV_5X` - division for SerDes clock
-* `DIV_1X` - division for pixel clock
-* `IN_PERIOD` - period of input clock in nanoseconds (ns)
-
-#### Display Timings
-* `H_RES` - active horizontal resolution in pixels 
-* `V_RES` - active vertical resolution in lines 
-* `H_FP` - horizontal front porch length in pixels
-* `H_SYNC` - horizontal sync length in pixels
-* `H_BP` - horizontal back porch length in pixels
-* `V_FP` - vertical front porch length in lines
-* `V_SYNC` - vertical sync length in lines
-* `V_BP` - vertical back porch length in lines
-* `H_POL` - horizontal sync polarity (0:negative, 1:positive)
-* `V_POL` - vertical sync polarity (0:negative, 1:positive)
-
-#### Test Card
-* `H_RES` - horizontal test card resolution in pixels 
-* `V_RES` - vertical test card resolution in lines 
+Details on module parameters and interfaces can be found in the [modules](doc/modules.md) doc.
 
 
 ## TMDS Encoder Model
