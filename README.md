@@ -120,6 +120,8 @@ Sample output from Verilog TMDS test bench [tmds_encoder_dvi_tb.v](hdl/test/tmds
     31 001011111   6,   4, B1
     32 111100000   3,   0, A0
 
+You can also see full output from the [Python model](model/tmds-test-python.txt) and [Verilog implementation](model/tmds-test-verilog.txt) for comparison.
+
 
 ## Resource Utilization
 The display controller is lightweight, fitting into even the smallest FPGA: 
