@@ -87,7 +87,7 @@ Details on module interfaces can be found in the [modules](doc/modules.md) doc.
 
 If it isn't tested it doesn't work. Project F tests its designs in simulation and on real hardware. For the display controller you can use the included [test benches](hdl/test) and [Python TMDS model](#tmds-encoder-model) to exercise the design.
 
-We haven't formally verified the design yet, but plan to do this for the display timings and TMDS encoder during 2019. If you're interested in learning more about formal verification check out Clifford Wolf's [Formal Verification with SymbiYosys and Yosys-SMTBMC deck](http://www.clifford.at/papers/2017/smtbmc-sby/).
+We haven't formally verified the design yet, but plan to do this for the display timings and TMDS encoder during 2019. If you're interested in learning more about formal verification, check out Clifford Wolf's [Formal Verification with SymbiYosys and Yosys-SMTBMC deck](http://www.clifford.at/papers/2017/smtbmc-sby/).
 
 
 ## TMDS Encoder Model
