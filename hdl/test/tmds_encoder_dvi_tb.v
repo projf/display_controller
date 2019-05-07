@@ -16,6 +16,7 @@ module tmds_encode_dvi_tb();
     wire [9:0] tmds;
     reg [8:0] cycle;
     
+    // encoded TMDS data $display(...) is within tmds_encoder_dvi.v
     initial begin
         $display("\t               1s    B   O");
         clk <= 1;
