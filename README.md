@@ -14,10 +14,11 @@ For tutorials and further information visit [projectf.io](https://projectf.io).
 - [Resource Utilization](#resource-utilization)
 - [Porting](#porting)
 
+
 ## Display Interface Support
 This design supports displays using VGA, DVI, and HDMI.
 
-**VGA** support is straightforward; you can see an example in [`display_demo_vga.v`](hdl/demo/display_demo_vga.v). If you're building your own hardware, then [Retro Ramblings](http://retroramblings.net/?p=190) has a good example of creating a register ladder DAC.
+**VGA** support is straightforward; you can see an example in [`display_demo_vga.v`](hdl/demo/display_demo_vga.v). If you're building your own hardware, then [Retro Ramblings](http://retroramblings.net/?p=190) has a good example of creating a register ladder DAC. If you're looking for a ready-made VGA output then the [VGA Pmod](https://reference.digilentinc.com/reference/pmod/pmodvga/start) is a good option for around $10.
 
 **DVI** & **HDMI** use [transition-minimized differential signalling](https://en.wikipedia.org/wiki/Transition-minimized_differential_signaling) (TMDS) to transmit video over high-speed serial links. HDMI provides extra functionality over DVI, including audio support, but all HDMI displays should accept a standard DVI signal without issue. 
 
@@ -84,6 +85,7 @@ There are two different high-level designs. This section explains the steps used
 5. 10:1 Serializer - converts parallel 10-bit TMDS value into serial form
 6. Differential Signal Output - converts the TMDS data into differential form for output via two FPGA pins
 
+
 ## Modules
 * **[display_clocks](hdl/display_clocks.v)** - pixel and high-speed clocks for TMDS (includes Xilinx MMCM)
 * **[display_timings](hdl/display_timings.v)** - generates display timings, including horizontal and vertical sync
@@ -92,7 +94,6 @@ There are two different high-level designs. This section explains the steps used
 * **[tmds_encoder_dvi](hdl/tmds_encoder_dvi.v)** - encodes 8-bit per colour into 10-bit TMDS values for DVI
 
 You need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces. When performing TMDS encoding on FPGA, the top module makes use of the Xilinx OBUFDS buffer to generate the differential output. See [demos](#demos) for details.
-
 
 ### Module Parameters
 
