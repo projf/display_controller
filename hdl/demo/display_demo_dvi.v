@@ -114,7 +114,7 @@ module display_demo_dvi(
         .o_tmds_ch0_serial(tmds_ch0_serial),
         .o_tmds_ch1_serial(tmds_ch1_serial),
         .o_tmds_ch2_serial(tmds_ch2_serial),
-        .o_tmds_chc_serial(tmds_chc_serial)  // encoded to ensure sync
+        .o_tmds_chc_serial(tmds_chc_serial)  // encode pixel clock via same path
     );
     
     // TMDS Buffered Output
