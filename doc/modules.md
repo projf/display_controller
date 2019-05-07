@@ -2,10 +2,6 @@
 
 The display controller is a set of five core modules. This document explains their interfaces and parameters for the three you interact with: `display_clocks`, `display_timings` and `dvi_generator`. The other two modules are used by `dvi_generator`.
 
-* **[display_clocks](/hdl/display_clocks.v)** - pixel and high-speed clocks for TMDS 
-* **[display_timings](/hdl/display_timings.v)** - generates display timings, including horizontal and vertical sync
-* **[dvi_generator](/hdl/dvi_generator.v)** - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
-
 See [architecture](/README.md#Architecture) for an overview of the two different signal paths.
 
 You can see examples of these modules being used in the [demos](/hdl/demo) and [test benches](/hdl/test).
@@ -14,10 +10,9 @@ See [README](/README.md) for more documentation.
 
 ## Contents
 
-- [Display Clocks](#display-clocks)
-- [Display Timings](#display-timings)
-- [DVI Generator](#dvi-generator)
-
+* **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS 
+* **[Display Timings](#display-timings)** ([hdl](/hdl/display_timings.v)) - generates display timings, including horizontal and vertical sync
+* **[DVI Generator](#dvi-generator)** ([hdl](/hdl/dvi_generator.v)) - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
 
 ## Display Clocks
 

@@ -13,6 +13,7 @@ For tutorials and further information visit [projectf.io](https://projectf.io).
 - [Demos](#demos)
 - [Architecture](#architecture)
 - [Modules](#modules)
+- [Testing](#testing)
 - [TMDS Encoder Model](#tmds-encoder-model)
 - [Resource Utilization](#resource-utilization)
 
@@ -92,15 +93,22 @@ There are two different high-level designs. This section explains the steps used
 
 There are three modules you need to interface with for full TMDS generation:
 
-* **[display_clocks](hdl/display_clocks.v)** - pixel and high-speed clocks for TMDS (includes Xilinx MMCM)
-* **[display_timings](hdl/display_timings.v)** - generates display timings, including horizontal and vertical sync
-* **[dvi_generator](hdl/dvi_generator.v)** - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
+* **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS (includes Xilinx MMCM)
+* **[Display Timings](#display-timings)** ([hdl](/hdl/display_timings.v)) - generates display timings, including horizontal and vertical sync
+* **[DVI Generator](#dvi-generator)** ([hdl](/hdl/dvi_generator.v)) - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
 
 If you're generating VGA or using DVI/HDMI hardware that includes its own TMDS encoder you don't need `dvi_generator`.
 
 You need a _top_ module to operate the display controller; the project includes [demo](hdl/demo) versions for different display interfaces. When performing TMDS encoding on FPGA, the top module makes use of the Xilinx OBUFDS buffer to generate the differential output. See [demos](#demos) for details.
 
 Details on module parameters and interfaces can be found in the [modules](doc/modules.md) doc.
+
+
+## Testing
+
+If it isn't tested it doesn't work. Project F tests its designs in simulation and on real hardware. For the display controller you can use the included [test benches](hdl/test) and [Python TMDS model](#tmds-encoder-model) to exercise the design.
+
+We haven't formally verified the design yet, but plan to do this for the display timings and TMDS encoder during 2019. If you're interested in learning more about formal verification check out Clifford Wolf's [Formal Verification with SymbiYosys and Yosys-SMTBMC deck](http://www.clifford.at/papers/2017/smtbmc-sby/).
 
 
 ## TMDS Encoder Model
