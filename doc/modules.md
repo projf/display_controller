@@ -158,4 +158,4 @@ You can use these signals with `OBUFDS`, for example:
 
 Where `hdmi_tx_p[0]` and `hdmi_tx_n[0]` are the differential output pins for TMDS channel 0.
 
-You can see an example of this in the [DVI TMDS Demo](hdl/demo/display_demo_dvi.v).
+You can see an example of this in the [DVI TMDS demo](/hdl/demo/display_demo_dvi.v).
