@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
-// Project F: Display Test Card
+// Project F: Display Controller Test Card
 // (C)2019 Will Green, Open Source Hardware released under the MIT License
 // Learn more at https://projectf.io
 
@@ -10,8 +10,8 @@ module test_card #(
     V_RES=480
     )
     (    
-    input wire [12:0] i_x,
-    input wire [12:0] i_y,
+    input wire [15:0] i_x,
+    input wire [15:0] i_y,
     output wire o_red,
     output wire o_green,
     output wire o_blue

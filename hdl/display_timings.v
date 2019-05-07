@@ -26,8 +26,10 @@ module display_timings #(
     output wire o_vs,           // vertical sync
     output wire o_de,           // display enable: high during active video
     output wire o_frame,        // high for one tick at the start of each frame
-    output wire [12:0] o_h,     // vertical pixel position
-    output wire [12:0] o_v      // horizontal pixel position
+    output reg  [15:0] o_h,     // horizontal beam position (including blanking)
+    output reg  [15:0] o_v,     // vertical beam position (including blanking)
+    output wire [15:0] o_x,     // horizontal screen position (active pixels)
+    output wire [15:0] o_y      // vertical screen position (active pixels)
     );
     
     // Horizontal: sync, active, and pixels
@@ -43,48 +45,45 @@ module display_timings #(
     localparam VA_STA = VS_END + V_BP;      // active start
     localparam VA_END = VA_STA + V_RES;     // active end 
     localparam FRAME  = VA_END;             // frame lines 
-    
-    reg [12:0] h_count;  // line position in pixels including blanking 
-    reg [12:0] v_count;  // frame position in lines including blanking 
-    
+
     // generate sync signals with correct polarity
-    assign o_hs = H_POL ? (h_count > HS_STA & h_count <= HS_END)
-        : ~(h_count > HS_STA & h_count <= HS_END);
-    assign o_vs = V_POL ? (v_count > VS_STA & v_count <= VS_END)
-        : ~(v_count > VS_STA & v_count <= VS_END);
+    assign o_hs = H_POL ? (o_h > HS_STA && o_h <= HS_END)
+        : ~(o_h > HS_STA && o_h <= HS_END);
+    assign o_vs = V_POL ? (o_v > VS_STA && o_v <= VS_END)
+        : ~(o_v > VS_STA && o_v <= VS_END);
         
     // display enable: high during active period
-    assign o_de = h_count > HA_STA & h_count <= HA_END
-        & v_count > VA_STA & v_count <= VA_END; 
+    assign o_de = o_h > HA_STA && o_h <= HA_END
+        && o_v > VA_STA && o_v <= VA_END;
     
-    // keep o_h and o_v bound within active pixels
-    assign o_h = (o_de & h_count > HA_STA & h_count <= HA_END) ? 
-                    h_count - (HA_STA + 1): 0;
-    assign o_v = (o_de & v_count > VA_STA & v_count <= VA_END) ? 
-                    v_count - (VA_STA + 1): 0;
+    // keep o_x and o_y bound within active pixels
+    assign o_x = (o_de && o_h > HA_STA && o_h <= HA_END) ?
+                    o_h - (HA_STA + 1): 0;
+    assign o_y = (o_de && o_v > VA_STA && o_v <= VA_END) ?
+                    o_v - (VA_STA + 1): 0;
     
     // o_frame: high for one tick at the start of each frame
-    assign o_frame = (v_count == 0 & h_count == 0);
+    assign o_frame = (o_v == 0 && o_h == 0);
 
     always @ (posedge i_pixclk or posedge i_rst)
     begin
         if (i_rst)  // reset to start of frame
         begin
-            h_count <= 0;
-            v_count <= 0;
+            o_h <= 0;
+            o_v <= 0;
         end
         else
         begin
-            if (h_count == LINE)  // end of line
+            if (o_h == LINE)  // end of line
             begin
-                h_count <= 0;
-                if (v_count == FRAME)  // end of frame
-                    v_count <= 0;
+                o_h <= 0;
+                if (o_v == FRAME)  // end of frame
+                    o_v <= 0;
                 else
-                    v_count <= v_count + 1;
+                    o_v <= o_v + 1;
             end
             else 
-                h_count <= h_count + 1;
+                o_h <= o_h + 1;
         end
     end
 endmodule
