@@ -72,9 +72,9 @@ You can adjust the demo resolution by changing the parameters for `display_clock
 
 There are three modules you need to interface with for full TMDS generation:
 
-* **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS
-* **[Display Timings](#display-timings)** ([hdl](/hdl/display_timings.v)) - generates display timings, including horizontal and vertical sync
-* **[DVI Generator](#dvi-generator)** ([hdl](/hdl/dvi_generator.v)) - encodes data with TMDS then serializes it to create a DVI signal
+* **[Display Clocks](doc/modules.md#display-clocks)** ([hdl](hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS
+* **[Display Timings](doc/modules.md#display-timings)** ([hdl](hdl/display_timings.v)) - generates display timings, including horizontal and vertical sync
+* **[DVI Generator](doc/modules.md#dvi-generator)** ([hdl](hdl/dvi_generator.v)) - encodes data with TMDS then serializes it to create a DVI signal
 
 If you're generating VGA or using DVI/HDMI hardware that includes its own TMDS encoder you don't need the DVI generator.
 
@@ -95,7 +95,7 @@ The display controller includes a simple [Python model](model/tmds.py) to help w
 
 There are two steps to TMDS encoding: applying XOR or XNOR to the bits to minimize transitions and keeping the overall number of 1s and 0s similar to ensure DC balance. The first step depends only on the current input value, so it is easy to test. However, balancing depends on the previous values, which makes testing harder; this is where the model is particularly useful. 
 
-By default, the Python model encodes all 256 possible 8-bit values in order, but it's easy to change the script to handle other combinations. `A0, A1, B0, or B1` show which of the four balancing options was taken: you can see what they do in the [Python source](model/tmds.py) or [Verilog design](/hdl/tmds_encoder_dvi.v).
+By default, the Python model encodes all 256 possible 8-bit values in order, but it's easy to change the script to handle other combinations. `A0, A1, B0, or B1` show which of the four balancing options was taken: you can see what they do in the [Python source](model/tmds.py) or [Verilog design](hdl/tmds_encoder_dvi.v).
 
 Sample Python output:
 
