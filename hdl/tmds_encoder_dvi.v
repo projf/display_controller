@@ -14,13 +14,13 @@ module tmds_encoder_dvi(
     output reg [9:0] o_tmds     // encoded TMDS data
     );
 
-    // select basic encoding based on the ones in the input data   
+    // select basic encoding based on the ones in the input data
     wire [3:0] d_ones = {3'b0,i_data[0]} + {3'b0,i_data[1]} + {3'b0,i_data[2]}
-        + {3'b0,i_data[3]} + {3'b0,i_data[4]} + {3'b0,i_data[5]} 
+        + {3'b0,i_data[3]} + {3'b0,i_data[4]} + {3'b0,i_data[5]}
         + {3'b0,i_data[6]} + {3'b0,i_data[7]};
     wire use_xnor = (d_ones > 4'd4) || ((d_ones == 4'd4) && (i_data[0] == 0));
-    
-    // encode colour data with xor/xnor 
+
+    // encode colour data with xor/xnor
     /* verilator lint_off UNOPTFLAT */
     wire [8:0] enc_qm;
     assign enc_qm[0] = i_data[0];
@@ -35,16 +35,16 @@ module tmds_encoder_dvi(
     /* verilator lint_on UNOPTFLAT */
 
     // disparity in encoded data for DC balancing: needs to cover -8 to +8
-    wire signed [4:0] ones = {4'b0,enc_qm[0]} + {4'b0,enc_qm[1]} 
-            + {4'b0,enc_qm[2]} + {4'b0,enc_qm[3]} + {4'b0,enc_qm[4]} 
+    wire signed [4:0] ones = {4'b0,enc_qm[0]} + {4'b0,enc_qm[1]}
+            + {4'b0,enc_qm[2]} + {4'b0,enc_qm[3]} + {4'b0,enc_qm[4]}
             + {4'b0,enc_qm[5]} + {4'b0,enc_qm[6]} + {4'b0,enc_qm[7]};
-    
+
     wire signed [4:0] zeros = 5'b01000 - ones;
     wire signed [4:0] balance = ones - zeros;
 
     // record ongoing DC bias
     reg signed [4:0] bias;
-        
+
     always @ (posedge i_clk)
     begin
         if (i_rst)
@@ -76,7 +76,7 @@ module tmds_encoder_dvi(
                     $display("\t%d %b %d, %d, A0", i_data, enc_qm, ones, bias);
                     o_tmds[9:0] <= {2'b01, enc_qm[7:0]};
                     bias <= bias + balance;
-                end  
+                end
             end
             else if ((bias > 0 && balance > 0) || (bias < 0 && balance < 0))
             begin

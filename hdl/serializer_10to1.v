@@ -12,15 +12,15 @@ module serializer_10to1(
     input  wire [9:0] i_data,   // input parallel data
     output wire o_data          // output serial data
     );
-    
+
     // requires async reset followed by CLKDIV sync deassert a few cycles later
-    localparam ENABLE_DELAY_TICKS = 8;  // clock cycles to wait before deassert 
+    localparam ENABLE_DELAY_TICKS = 8;  // clock cycles to wait before deassert
     reg [3:0] rst_cnt;  // reset delay counter
     reg rst_oserdes;    // oserdes reset
-    
+
     always @ (posedge i_clk or posedge i_rst)
     begin
-        if (i_rst) 
+        if (i_rst)
         begin
             rst_oserdes <= 1;
             rst_cnt <= ENABLE_DELAY_TICKS;
@@ -35,7 +35,7 @@ module serializer_10to1(
     end
 
     wire shift1, shift2;  // wires between oserdes
-        
+
     OSERDESE2 #(
       .DATA_RATE_OQ("DDR"),   // DDR, SDR
       .DATA_RATE_TQ("SDR"),   // DDR, BUF, SDR

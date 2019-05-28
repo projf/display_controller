@@ -24,7 +24,7 @@ module display_demo_dvi_pmod3(
 
     wire rst = ~RST_BTN;            // reset is active low on Arty & Nexys Video
     // wire rst = RST_BTN;          // reset is active high on Basys3 (BTNC)
-    
+
     // Display Clocks
     wire pix_clk;                   // pixel clock
     wire clk_lock;                  // clock locked?
@@ -38,10 +38,10 @@ module display_demo_dvi_pmod3(
     )
     display_clocks_inst
     (
-       .i_clk(CLK), 
-       .i_rst(rst), 
-       .o_clk_1x(pix_clk), 
-       .o_clk_5x(),                 // 5x clock not needed for VGA 
+       .i_clk(CLK),
+       .i_rst(rst),
+       .o_clk_1x(pix_clk),
+       .o_clk_5x(),                 // 5x clock not needed for VGA
        .o_locked(clk_lock)
     );
 
@@ -64,12 +64,12 @@ module display_demo_dvi_pmod3(
         .V_BP(33),                  //      33       23       20        36
         .H_POL(0),                  //       0        1        1         1
         .V_POL(0)                   //       0        1        1         1
-    ) 
-    display_timings_inst (  
+    )
+    display_timings_inst (
         .i_pixclk(pix_clk),
         .i_rst(rst),
-        .o_hs(h_sync), 
-        .o_vs(v_sync), 
+        .o_hs(h_sync),
+        .o_vs(v_sync),
         .o_de(de),
         .o_frame(frame),
         .o_h(),
@@ -81,9 +81,9 @@ module display_demo_dvi_pmod3(
     // Test Card Generation
     wire red, green, blue;
     test_card #(
-        .H_RES(640), 
+        .H_RES(640),
         .V_RES(480)
-    ) 
+    )
     test_card_inst (
         .i_x(x),
         .i_y(y),
@@ -91,13 +91,13 @@ module display_demo_dvi_pmod3(
         .o_green(green),
         .o_blue(blue)
     );
-    
+
     // 3-bit DVI Output
     assign DVI_HS   = h_sync;
     assign DVI_VS   = v_sync;
     assign DVI_CLK  = pix_clk;
     assign DVI_DE   = de;
-    assign DVI_R    = de & red;         
+    assign DVI_R    = de & red;
     assign DVI_G    = de & green;
     assign DVI_B    = de & blue;
 endmodule

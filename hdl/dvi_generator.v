@@ -24,29 +24,29 @@ module dvi_generator(
     );
 
     wire [9:0] tmds_ch0, tmds_ch1, tmds_ch2;
-    
+
     tmds_encoder_dvi encode_ch0 (
-        .i_clk(i_pix_clk), 
+        .i_clk(i_pix_clk),
         .i_rst(i_rst),
-        .i_data(i_data_ch0),  
+        .i_data(i_data_ch0),
         .i_ctrl(i_ctrl_ch0),
         .i_de(i_de),
         .o_tmds(tmds_ch0)
     );
-    
+
     tmds_encoder_dvi encode_ch1 (
-        .i_clk(i_pix_clk), 
+        .i_clk(i_pix_clk),
         .i_rst(i_rst),
-        .i_data(i_data_ch1),  
+        .i_data(i_data_ch1),
         .i_ctrl(i_ctrl_ch1),
         .i_de(i_de),
         .o_tmds(tmds_ch1)
     );
-            
+
     tmds_encoder_dvi encode_ch2 (
-        .i_clk(i_pix_clk), 
+        .i_clk(i_pix_clk),
         .i_rst(i_rst),
-        .i_data(i_data_ch2),  
+        .i_data(i_data_ch2),
         .i_ctrl(i_ctrl_ch2),
         .i_de(i_de),
         .o_tmds(tmds_ch2)
@@ -59,7 +59,7 @@ module dvi_generator(
         .i_data(tmds_ch0),
         .o_data(o_tmds_ch0_serial)
     );
-        
+
     serializer_10to1 serialize_ch1 (
         .i_clk(i_pix_clk),
         .i_clk_hs(i_pix_clk_5x),
@@ -67,7 +67,7 @@ module dvi_generator(
         .i_data(tmds_ch1),
         .o_data(o_tmds_ch1_serial)
     );
-    
+
     serializer_10to1 serialize_ch2 (
         .i_clk(i_pix_clk),
         .i_clk_hs(i_pix_clk_5x),
