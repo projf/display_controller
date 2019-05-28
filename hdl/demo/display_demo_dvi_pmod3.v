@@ -41,7 +41,7 @@ module display_demo_dvi_pmod3(
        .i_clk(CLK),
        .i_rst(rst),
        .o_clk_1x(pix_clk),
-       .o_clk_5x(),                 // 5x clock not needed for VGA
+       .o_clk_5x(),                 // 5x clock not needed for DVI Pmod
        .o_locked(clk_lock)
     );
 
