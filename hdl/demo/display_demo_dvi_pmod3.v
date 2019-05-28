@@ -6,9 +6,9 @@
 // Learn more at https://projectf.io
 
 // This demo requires the following Verilog modules:
-// * display_clocks
-// * display_timings
-// * test_card
+//  * display_clocks
+//  * display_timings
+//  * test_card
 
 module display_demo_dvi_pmod3(
     input  wire CLK,                // board clock: 100 MHz on Arty/Basys3/Nexys

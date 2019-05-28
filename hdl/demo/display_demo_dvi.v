@@ -6,12 +6,12 @@
 // Learn more at https://projectf.io
 
 // This demo requires the following Verilog modules:
-// * display_clocks
-// * display_timings
-// * dvi_generator
-// * serializer_10to1
-// * test_card
-// * tmds_encoder_dvi
+//  * display_clocks
+//  * display_timings
+//  * dvi_generator
+//  * serializer_10to1
+//  * test_card
+//  * tmds_encoder_dvi
 
 module display_demo_dvi(
     input  wire CLK,                // board clock: 100 MHz on Arty/Basys3/Nexys
