@@ -6,7 +6,7 @@
 // Learn more at https://projectf.io
 
 module display_clocks_tb();
-    
+
     reg rst;
     reg clk;
 
@@ -24,9 +24,9 @@ module display_clocks_tb();
     )
     display_clocks_480p
     (
-       .i_clk(clk), 
-       .i_rst(rst), 
-       .o_clk_1x(pix_clk_480p), 
+       .i_clk(clk),
+       .i_rst(rst),
+       .o_clk_1x(pix_clk_480p),
        .o_clk_5x(pix_clk_5x_480p),
        .o_locked(clk_lock_480p)
     );
@@ -46,9 +46,9 @@ module display_clocks_tb();
     )
     display_clocks_600p
     (
-       .i_clk(clk), 
-       .i_rst(rst), 
-       .o_clk_1x(pix_clk_600p), 
+       .i_clk(clk),
+       .i_rst(rst),
+       .o_clk_1x(pix_clk_600p),
        .o_clk_5x(pix_clk_5x_600p),
        .o_locked(clk_lock_600p)
     );
@@ -68,9 +68,9 @@ module display_clocks_tb();
     )
     display_clocks_720p
     (
-       .i_clk(clk), 
-       .i_rst(rst), 
-       .o_clk_1x(pix_clk_720p), 
+       .i_clk(clk),
+       .i_rst(rst),
+       .o_clk_1x(pix_clk_720p),
        .o_clk_5x(pix_clk_5x_720p),
        .o_locked(clk_lock_720p)
     );
@@ -90,9 +90,9 @@ module display_clocks_tb();
     )
     display_clocks_1080p
     (
-       .i_clk(clk), 
-       .i_rst(rst), 
-       .o_clk_1x(pix_clk_1080p), 
+       .i_clk(clk),
+       .i_rst(rst),
+       .o_clk_1x(pix_clk_1080p),
        .o_clk_5x(pix_clk_5x_1080p),
        .o_locked(clk_lock_1080p)
     );
@@ -105,10 +105,10 @@ module display_clocks_tb();
         #10
         rst <= 0;
         #10000
-        $display($time, " << Simulation Complete >>");  
+        $display($time, " << Simulation Complete >>");
     end
-       
-    always 
+
+    always
        #5 clk = ~clk;
 
 endmodule

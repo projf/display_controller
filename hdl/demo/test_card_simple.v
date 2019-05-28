@@ -6,10 +6,10 @@
 // Learn more at https://projectf.io
 
 module test_card_simple #(
-    H_RES=640, 
+    H_RES=640,
     V_RES=480
     )
-    (    
+    (
     input wire [15:0] i_x,
     input wire [15:0] i_y,
     output wire o_red,

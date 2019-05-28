@@ -6,7 +6,7 @@
 // Learn more at https://projectf.io
 
 module display_timings_tb();
-    
+
     // Display timings: 640x480p60
     reg rst_480p;
     reg clk_480p;
@@ -31,15 +31,15 @@ module display_timings_tb();
         .V_BP(33),
         .H_POL(0),
         .V_POL(0)
-    ) 
-    display_timings_480p (  
+    )
+    display_timings_480p (
         .i_pixclk(clk_480p),
         .i_rst(rst_480p),
-        .o_hs(h_sync_480p), 
-        .o_vs(v_sync_480p), 
+        .o_hs(h_sync_480p),
+        .o_vs(v_sync_480p),
         .o_de(de_480p),
         .o_frame(frame_480p),
-        .o_h(h_480p), 
+        .o_h(h_480p),
         .o_v(v_480p),
         .o_x(x_480p),
         .o_y(y_480p)
@@ -58,7 +58,7 @@ module display_timings_tb();
     wire v_sync_720p;    // vertical sync
     wire de_720p;        // display enable: high during active video
     wire frame_720p;     // high for one tick at the start of each frame
-    
+
     display_timings #(
         .H_RES(1280),
         .V_RES(720),
@@ -66,25 +66,25 @@ module display_timings_tb();
         .H_SYNC(40),
         .H_BP(220),
         .V_FP(5),
-        .V_SYNC(5),     
-        .V_BP(20),      
-        .H_POL(1), 
-        .V_POL(1) 
-    ) 
-    display_timings_720p (  
+        .V_SYNC(5),
+        .V_BP(20),
+        .H_POL(1),
+        .V_POL(1)
+    )
+    display_timings_720p (
         .i_pixclk(clk_720p),
         .i_rst(rst_720p),
-        .o_hs(h_sync_720p), 
-        .o_vs(v_sync_720p), 
+        .o_hs(h_sync_720p),
+        .o_vs(v_sync_720p),
         .o_de(de_720p),
         .o_frame(frame_720p),
-        .o_h(h_720p), 
+        .o_h(h_720p),
         .o_v(v_720p),
         .o_x(x_720p),
         .o_y(y_720p)
     );
-    
-    
+
+
     initial begin
         $display($time, " << Starting Simulation >>");
         clk_480p <= 1;
@@ -97,10 +97,10 @@ module display_timings_tb();
         rst_720p <= 0;
     end
 
-    always 
+    always
        #19.84 clk_480p = ~clk_480p;  // 39.68 ns clock cycle (25.2 MHz)
-   
-    always 
+
+    always
        #6.73 clk_720p = ~clk_720p;  // 13.47 ns clock cycle (74.5 MHz)
-       
+
 endmodule

@@ -1,4 +1,4 @@
-# Project F Display Controller 
+# Project F Display Controller
 
 The Project F display controller makes it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. This design and its documentation are licensed under the MIT License.
 
@@ -22,12 +22,12 @@ This design supports displays using VGA, DVI, and HDMI.
 
 **VGA** support is straightforward; you can see an example in the [VGA demo](hdl/demo/display_demo_vga.v). If you're building your own hardware, then [Retro Ramblings](http://retroramblings.net/?p=190) has a good example of creating a register ladder DAC. If you're looking for a ready-made VGA output, then the [VGA Pmod](https://reference.digilentinc.com/reference/pmod/pmodvga/start) is a good option for around $10.
 
-**DVI** & **HDMI** use [transition-minimized differential signalling](https://en.wikipedia.org/wiki/Transition-minimized_differential_signaling) (TMDS) to transmit video over high-speed serial links. HDMI provides extra functionality over DVI, including audio support, but all HDMI displays should accept a standard DVI signal without issue. 
+**DVI** & **HDMI** use [transition-minimized differential signalling](https://en.wikipedia.org/wiki/Transition-minimized_differential_signaling) (TMDS) to transmit video over high-speed serial links. HDMI provides extra functionality over DVI, including audio support, but all HDMI displays should accept a standard DVI signal without issue.
 
-The display controller offers two types of TMDS generation: 
+The display controller offers two types of TMDS generation:
 
 * Direct generation on FPGA
-* [Black Mesa Labs DVI Pmod](https://blackmesalabs.wordpress.com/2017/12/15/bml-hdmi-video-for-fpgas-over-pmod/)  
+* [Black Mesa Labs DVI Pmod](https://blackmesalabs.wordpress.com/2017/12/15/bml-hdmi-video-for-fpgas-over-pmod/)
 
 Direct TMDS generation on FPGA requires high-frequency clocks (742.5 MHz for 720p60) and SerDes but allows full control of the signal including HDMI features. HDMI support is currently via backwards compatibility with DVI: any standard HDMI display should accept DVI signals. However, this display controller lacks support for audio or advanced HDMI features at present.
 
@@ -36,14 +36,14 @@ The Black Mesa Labs (BML) Pmod is based on the Texas Instruments [TFP410](http:/
 
 ## Display Resolution Support
 The following four display resolutions are tested and included by default (all at 60 Hz refresh rate):
-    
-     Resolution  Ratio   Clock     
+
+     Resolution  Ratio   Clock
      640 x  480    4:3   25.20 MHz [1]
      800 x  600    4:3   40.00 MHz
-    1280 x  720   16:9   74.25 MHz     
-    1920 x 1080   16:9  148.50 MHz [2]  
+    1280 x  720   16:9   74.25 MHz
+    1920 x 1080   16:9  148.50 MHz [2]
 
-You can easily add timings for other resolutions; see [demos](#demos) for how to do this. 
+You can easily add timings for other resolutions; see [demos](#demos) for how to do this.
 
 _[1] The canonical clock for 640x480 60Hz is 25.175 MHz, but 25.2 MHz is within VESA spec and easier to generate._
 
@@ -91,9 +91,9 @@ We haven't formally verified the design yet, but plan to do this for the display
 
 
 ## TMDS Encoder Model
-The display controller includes a simple [Python model](model/tmds.py) to help with TMDS encoder development. 
+The display controller includes a simple [Python model](model/tmds.py) to help with TMDS encoder development.
 
-There are two steps to TMDS encoding: applying XOR or XNOR to the bits to minimize transitions and keeping the overall number of 1s and 0s similar to ensure DC balance. The first step depends only on the current input value, so it is easy to test. However, balancing depends on the previous values, which makes testing harder; this is where the model is particularly useful. 
+There are two steps to TMDS encoding: applying XOR or XNOR to the bits to minimize transitions and keeping the overall number of 1s and 0s similar to ensure DC balance. The first step depends only on the current input value, so it is easy to test. However, balancing depends on the previous values, which makes testing harder; this is where the model is particularly useful.
 
 By default, the Python model encodes all 256 possible 8-bit values in order, but it's easy to change the script to handle other combinations. `A0, A1, B0, or B1` show which of the four balancing options was taken: you can see what they do in the [Python source](model/tmds.py) or [Verilog design](hdl/tmds_encoder_dvi.v).
 
@@ -115,7 +115,7 @@ You can also see the full output from the [Python model](model/tmds-test-python.
 
 
 ## Resource Utilization
-The display controller is lightweight, fitting into even the smallest FPGA: 
+The display controller is lightweight, fitting into even the smallest FPGA:
 
                       Artix-7
     Demo             LUT     FF

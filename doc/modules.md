@@ -10,7 +10,7 @@ See [README](/README.md) for more documentation.
 ## Contents
 
 - **[Architecture](#architecture)**
-- **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS 
+- **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS
 - **[Display Timings](#display-timings)** ([hdl](/hdl/display_timings.v)) - generates display timings, including horizontal and vertical sync
 - **[DVI Generator](#dvi-generator)** ([hdl](/hdl/dvi_generator.v)) - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
 
@@ -84,7 +84,7 @@ The display timings generator turns timing parameters into appropriately timed s
 * `i_pixclk` - pixel clock
 * `i_rst` - reset (active high)
 
-The pixel clock must be suitable for the timings given in the parameters (see display clocks, above). 
+The pixel clock must be suitable for the timings given in the parameters (see display clocks, above).
 
 ### Outputs
 
@@ -97,7 +97,7 @@ The pixel clock must be suitable for the timings given in the parameters (see di
 * `o_x [15:0]` - horizontal screen position (active pixels)
 * `o_y [15:0]` - vertical screen position (active pixels)
 
-The positional outputs `(h,v)` and `(x,y)` allow you to determine the current pixel AKA "beam position". The values provided by `h` & `v `include the blanking interval, while `x` & `y` only include valid on-screen positions. For simple drawing or bitmap display you can use `(x,y)` and safely ignore `(h,v)`. However, if you're doing calculations in real time "racing the beam", then you'll want to perform actions in the blanking interval, which is where (h,v) comes in. 
+The positional outputs `(h,v)` and `(x,y)` allow you to determine the current pixel AKA "beam position". The values provided by `h` & `v `include the blanking interval, while `x` & `y` only include valid on-screen positions. For simple drawing or bitmap display you can use `(x,y)` and safely ignore `(h,v)`. However, if you're doing calculations in real time "racing the beam", then you'll want to perform actions in the blanking interval, which is where (h,v) comes in.
 
 Project F considers blanking intervals to occur _before_ active pixels. At the start of a frame (indicated by the `o_frame` signal), you have the blanking intervals in which to work before active pixel drawing occurs. The following sketch this for 1280x720p60 (other resolutions work in the same way):
 
@@ -109,8 +109,8 @@ Horizontal and vertical sync may be active high or low depending on the display 
 
 ### Parameters
 
-* `H_RES` - active horizontal resolution in pixels 
-* `V_RES` - active vertical resolution in lines 
+* `H_RES` - active horizontal resolution in pixels
+* `V_RES` - active vertical resolution in lines
 * `H_FP` - horizontal front porch length in pixels
 * `H_SYNC` - horizontal sync length in pixels
 * `H_BP` - horizontal back porch length in pixels
@@ -138,7 +138,7 @@ DVI generator instantiates two other modules to do the actual work: one for [TMD
 * `i_data_ch0 [7:0]` - 8-bit blue colour data (TMDS channel 0)
 * `i_data_ch1 [7:0]` - 8-bit green colour data (TMDS channel 1)
 * `i_data_ch2 [7:0]` - 8-bit red colour data (TMDS channel 2)
-* `i_ctrl_ch0 [1:0]` - channel 0 control data; set to `{v_sync, h_sync}` from [display timings](#display-timings) 
+* `i_ctrl_ch0 [1:0]` - channel 0 control data; set to `{v_sync, h_sync}` from [display timings](#display-timings)
 * `i_ctrl_ch1 [1:0]` - channel 1 control data; set to `2'b00`
 * `i_ctrl_ch2 [1:0]` - channel 2 control data; set to `2'b00`
 
@@ -153,7 +153,7 @@ The output is the four TMDS encoded serial channels ready for output as differen
 
 You can use these signals with `OBUFDS`, for example:
 
-    OBUFDS #(.IOSTANDARD("TMDS_33")) 
+    OBUFDS #(.IOSTANDARD("TMDS_33"))
         tmds_buf_ch0 (.I(tmds_ch0_serial), .O(hdmi_tx_p[0]), .OB(hdmi_tx_n[0]));
 
 Where `hdmi_tx_p[0]` and `hdmi_tx_n[0]` are the differential output pins for TMDS channel 0.

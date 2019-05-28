@@ -31,41 +31,41 @@ module display_timings #(
     output wire [15:0] o_x,     // horizontal screen position (active pixels)
     output wire [15:0] o_y      // vertical screen position (active pixels)
     );
-    
+
     // Horizontal: sync, active, and pixels
     localparam HS_STA = H_FP - 1;           // sync start (first pixel is 0)
     localparam HS_END = HS_STA + H_SYNC;    // sync end
     localparam HA_STA = HS_END + H_BP;      // active start
-    localparam HA_END = HA_STA + H_RES;     // active end 
-    localparam LINE   = HA_END;             // line pixels 
+    localparam HA_END = HA_STA + H_RES;     // active end
+    localparam LINE   = HA_END;             // line pixels
 
     // Vertical: sync, active, and pixels
     localparam VS_STA = V_FP - 1;           // sync start (first line is 0)
     localparam VS_END = VS_STA + V_SYNC;    // sync end
     localparam VA_STA = VS_END + V_BP;      // active start
-    localparam VA_END = VA_STA + V_RES;     // active end 
-    localparam FRAME  = VA_END;             // frame lines 
+    localparam VA_END = VA_STA + V_RES;     // active end
+    localparam FRAME  = VA_END;             // frame lines
 
     // generate sync signals with correct polarity
     assign o_hs = H_POL ? (o_h > HS_STA && o_h <= HS_END)
         : ~(o_h > HS_STA && o_h <= HS_END);
     assign o_vs = V_POL ? (o_v > VS_STA && o_v <= VS_END)
         : ~(o_v > VS_STA && o_v <= VS_END);
-        
+
     // display enable: high during active period
     assign o_de = o_h > HA_STA && o_h <= HA_END
         && o_v > VA_STA && o_v <= VA_END;
-    
+
     // keep o_x and o_y bound within active pixels
     assign o_x = (o_de && o_h > HA_STA && o_h <= HA_END) ?
                     o_h - (HA_STA + 1): 0;
     assign o_y = (o_de && o_v > VA_STA && o_v <= VA_END) ?
                     o_v - (VA_STA + 1): 0;
-    
+
     // o_frame: high for one tick at the start of each frame
     assign o_frame = (o_v == 0 && o_h == 0);
 
-    always @ (posedge i_pixclk or posedge i_rst)
+    always @ (posedge i_pixclk)
     begin
         if (i_rst)  // reset to start of frame
         begin
@@ -82,7 +82,7 @@ module display_timings #(
                 else
                     o_v <= o_v + 1;
             end
-            else 
+            else
                 o_h <= o_h + 1;
         end
     end

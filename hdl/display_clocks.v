@@ -21,9 +21,9 @@ module display_clocks #(
     output wire o_clk_5x,   // 5x clock for 10:1 DDR SerDes
     output wire o_locked    // clock locked? (active high)
     );
-    
+
     wire clk_fb;  // internal feedback
-    
+
     MMCME2_BASE #(
         .BANDWIDTH("OPTIMIZED"),        // Jitter programming (OPTIMIZED, HIGH, LOW)
         .CLKFBOUT_MULT_F(MULT_MASTER),  // Multiply value for all CLKOUT (2.000-64.000).

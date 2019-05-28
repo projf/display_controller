@@ -6,12 +6,12 @@
 // Learn more at https://projectf.io
 
 // This demo requires the following Verilog modules:
-// * display_clocks
-// * display_timings
-// * dvi_generator
-// * serializer_10to1
-// * test_card
-// * tmds_encoder_dvi 
+//  * display_clocks
+//  * display_timings
+//  * dvi_generator
+//  * serializer_10to1
+//  * test_card
+//  * tmds_encoder_dvi
 
 module display_demo_dvi(
     input  wire CLK,                // board clock: 100 MHz on Arty/Basys3/Nexys
@@ -22,13 +22,13 @@ module display_demo_dvi(
     inout  wire hdmi_tx_rsda,       // DDC bidirectional
     output wire hdmi_tx_clk_n,      // HDMI clock differential negative
     output wire hdmi_tx_clk_p,      // HDMI clock differential positive
-    output wire [2:0] hdmi_tx_n,    // Three HDMI channels differential negative       
+    output wire [2:0] hdmi_tx_n,    // Three HDMI channels differential negative
     output wire [2:0] hdmi_tx_p     // Three HDMI channels differential positive
     );
 
     wire rst = ~RST_BTN;            // reset is active low on Arty & Nexys Video
     // wire rst = RST_BTN;          // reset is active high on Basys3 (BTNC)
-    
+
     // Display Clocks
     wire pix_clk;                   // pixel clock
     wire pix_clk_5x;                // 5x clock for 10:1 DDR SerDes
@@ -43,9 +43,9 @@ module display_demo_dvi(
     )
     display_clocks_inst
     (
-       .i_clk(CLK), 
-       .i_rst(rst), 
-       .o_clk_1x(pix_clk), 
+       .i_clk(CLK),
+       .i_rst(rst),
+       .o_clk_1x(pix_clk),
        .o_clk_5x(pix_clk_5x),
        .o_locked(clk_lock)
     );
@@ -69,12 +69,12 @@ module display_demo_dvi(
         .V_BP(20),                  //      33       23       20        36
         .H_POL(1),                  //       0        1        1         1
         .V_POL(1)                   //       0        1        1         1
-    ) 
-    display_timings_inst (  
+    )
+    display_timings_inst (
         .i_pixclk(pix_clk),
         .i_rst(rst),
-        .o_hs(h_sync), 
-        .o_vs(v_sync), 
+        .o_hs(h_sync),
+        .o_vs(v_sync),
         .o_de(de),
         .o_frame(frame),
         .o_h(),
@@ -86,9 +86,9 @@ module display_demo_dvi(
     // Test Card Generation
     wire red, green, blue;
     test_card #(
-        .H_RES(1280), 
+        .H_RES(1280),
         .V_RES(720)
-    ) 
+    )
     test_card_inst (
         .i_x(x),
         .i_y(y),
@@ -96,7 +96,7 @@ module display_demo_dvi(
         .o_green(green),
         .o_blue(blue)
     );
-    
+
     // TMDS Encoding and Serialization
     wire tmds_ch0_serial, tmds_ch1_serial, tmds_ch2_serial, tmds_chc_serial;
     dvi_generator dvi_out (
@@ -116,18 +116,18 @@ module display_demo_dvi(
         .o_tmds_ch2_serial(tmds_ch2_serial),
         .o_tmds_chc_serial(tmds_chc_serial)  // encode pixel clock via same path
     );
-    
+
     // TMDS Buffered Output
-    OBUFDS #(.IOSTANDARD("TMDS_33")) 
+    OBUFDS #(.IOSTANDARD("TMDS_33"))
         tmds_buf_ch0 (.I(tmds_ch0_serial), .O(hdmi_tx_p[0]), .OB(hdmi_tx_n[0]));
-    OBUFDS #(.IOSTANDARD("TMDS_33")) 
+    OBUFDS #(.IOSTANDARD("TMDS_33"))
         tmds_buf_ch1 (.I(tmds_ch1_serial), .O(hdmi_tx_p[1]), .OB(hdmi_tx_n[1]));
-    OBUFDS #(.IOSTANDARD("TMDS_33")) 
+    OBUFDS #(.IOSTANDARD("TMDS_33"))
         tmds_buf_ch2 (.I(tmds_ch2_serial), .O(hdmi_tx_p[2]), .OB(hdmi_tx_n[2]));
-    OBUFDS #(.IOSTANDARD("TMDS_33")) 
-        tmds_buf_chc (.I(tmds_chc_serial), .O(hdmi_tx_clk_p), .OB(hdmi_tx_clk_n)); 
-      
-    assign hdmi_tx_cec   = 1'bz;        
+    OBUFDS #(.IOSTANDARD("TMDS_33"))
+        tmds_buf_chc (.I(tmds_chc_serial), .O(hdmi_tx_clk_p), .OB(hdmi_tx_clk_n));
+
+    assign hdmi_tx_cec   = 1'bz;
     assign hdmi_tx_rsda  = 1'bz;
     assign hdmi_tx_rscl  = 1'b1;
 endmodule
