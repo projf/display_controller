@@ -13,26 +13,19 @@ module serializer_10to1(
     output wire o_data          // output serial data
     );
 
-    // requires async reset followed by CLKDIV sync deassert a few cycles later
-    localparam ENABLE_DELAY_TICKS = 8;  // clock cycles to wait before deassert
-    reg [3:0] rst_cnt;  // reset delay counter
-    reg rst_oserdes;    // oserdes reset
+    wire rst_oserdes;    // oserdes reset
 
-    always @ (posedge i_clk or posedge i_rst)
-    begin
-        if (i_rst)
-        begin
-            rst_oserdes <= 1;
-            rst_cnt <= ENABLE_DELAY_TICKS;
-        end
-        else
-        begin
-            if (rst_cnt != 0)
-                rst_cnt <= rst_cnt - 1;
-            else
-                rst_oserdes <= 0;
-        end
-    end
+    // asynchronous reset macro
+    xpm_cdc_async_rst #(
+        .DEST_SYNC_FF(4),
+        .INIT_SYNC_FF(1),
+        .RST_ACTIVE_HIGH(1)
+    )
+    async_reset (
+        .dest_arst(rst_oserdes),
+        .dest_clk(i_clk),
+        .src_arst(i_rst)
+    );
 
     wire shift1, shift2;  // wires between oserdes
 

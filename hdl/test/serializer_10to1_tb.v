@@ -29,7 +29,7 @@ module serializer_10to1_tb();
         #10
         rst <= 0;
 
-        #10
+        #100
         clk_lock <=1;
         tmds_data_1 <= 10'b0110100110;
         tmds_data_2 <= 10'b1001011001;

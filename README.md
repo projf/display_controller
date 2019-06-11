@@ -120,10 +120,10 @@ The display controller is lightweight, fitting into even the smallest FPGA:
                       Artix-7
     Demo             LUT     FF
     ---------------------------
-    DVI on FPGA      125     76
-    DVI BML 3-bit     67     32
+    DVI on FPGA      103     72
+    DVI BML 3-bit     69     32
     DVI BML 24-bit   TBC    TBC
-    VGA               67     32
+    VGA               70     32
 
-For reference an Artix A35T has 20,800 LUT6 and 41,600 FF, so even full TMDS uses well under 1% of the LUTs. Values are for demos using the simple test card module. Synthesized using Vivado 2018.3 with default options.
+For reference an Artix A35T has 20,800 LUT6 and 41,600 FF, so even full TMDS uses just 0.5% of the LUTs. Values are for demos using the simple test card module. Synthesized using Vivado 2019.1 with default options.
 
