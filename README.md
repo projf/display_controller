@@ -115,15 +115,14 @@ You can also see the full output from the [Python model](model/tmds-test-python.
 
 
 ## Resource Utilization
-The display controller is lightweight, fitting into even the smallest FPGA:
+The display controller is lightweight, fitting into small FPGAs. The following table shows utilization for Artix-7 using two of the included demos with simple and gradient test cards:
 
-                      Artix-7
-    Demo             LUT     FF
-    ---------------------------
-    DVI on FPGA      103     72
-    DVI BML 3-bit     69     32
-    DVI BML 24-bit   TBC    TBC
-    VGA               70     32
+                       Simple        Gradient
+    Interface        LUT     FF     LUT     FF
+    -------------------------------------------
+    DVI on FPGA      103     72     303     90
+    DVI BML 3-bit     69     32     TBC     TBC
+    DVI BML 24-bit   TBC    TBC     TBC     TBC
+    VGA               70     32     TBC     TBC
 
-For reference an Artix A35T has 20,800 LUT6 and 41,600 FF, so even full TMDS uses just 0.5% of the LUTs. Values are for demos using the simple test card module. Synthesized using Vivado 2019.1 with default options.
-
+For reference an Artix A35T has 20,800 LUT6 and 41,600 FF. Synthesized using Vivado 2019.1 with default options. Resolution was 1280x720 for 'DVI on FPGA' and 640x480 for DVI BML and VGA interfaces.

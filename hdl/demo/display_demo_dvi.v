@@ -10,7 +10,7 @@
 //  * display_timings
 //  * dvi_generator
 //  * serializer_10to1
-//  * test_card
+//  * test_card_gradient or test_card_squares or test_card_simple
 //  * tmds_encoder_dvi
 
 module display_demo_dvi(
@@ -83,19 +83,47 @@ module display_demo_dvi(
         .o_y(y)
     );
 
-    // Test Card Generation
-    wire red, green, blue;
-    test_card #(
-        .H_RES(1280),
-        .V_RES(720)
+    // test card colour output
+    wire [7:0] red;
+    wire [7:0] green;
+    wire [7:0] blue;
+
+    // Test Card: Gradient - ENABLE ONE TEST CARD INSTANCE ONLY
+    test_card_gradient #(
+        .STEP(2)            // step right shift: 480=2, 720=2, 1080=3
     )
     test_card_inst (
-        .i_x(x),
         .i_y(y),
         .o_red(red),
         .o_green(green),
         .o_blue(blue)
     );
+
+    // // Test Card: Squares - ENABLE ONE TEST CARD INSTANCE ONLY
+    // test_card_squares #(
+    //     .H_RES(1280),   // horizontal resolution
+    //     .V_RES(720)     // vertical resolution
+    // )
+    // test_card_inst (
+    //     .i_x(x),
+    //     .i_y(y),
+    //     .o_red(red),
+    //     .o_green(green),
+    //     .o_blue(blue)
+    // );
+
+    // // Test Card: Simple - ENABLE ONE TEST CARD INSTANCE ONLY
+    // test_card_simple #(
+    //     .H_RES(1280),   // horizontal resolution
+    //     .V_RES(720)     // vertical resolution
+    // )
+    // test_card_inst (
+    //     .i_x(x),
+    //     .i_y(y),
+    //     .o_red(red),
+    //     .o_green(green),
+    //     .o_blue(blue)
+    // );
 
     // TMDS Encoding and Serialization
     wire tmds_ch0_serial, tmds_ch1_serial, tmds_ch2_serial, tmds_chc_serial;
@@ -105,9 +133,9 @@ module display_demo_dvi(
         .i_clk_lock(clk_lock),
         .i_rst(rst),
         .i_de(de),
-        .i_data_ch0({8{blue}}),
-        .i_data_ch1({8{green}}),
-        .i_data_ch2({8{red}}),
+        .i_data_ch0(blue),
+        .i_data_ch1(green),
+        .i_data_ch2(red),
         .i_ctrl_ch0({v_sync, h_sync}),
         .i_ctrl_ch1(2'b00),
         .i_ctrl_ch2(2'b00),

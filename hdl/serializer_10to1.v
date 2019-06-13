@@ -13,7 +13,7 @@ module serializer_10to1(
     output wire o_data          // output serial data
     );
 
-    wire rst_oserdes;    // oserdes reset
+    wire rst_oserdes;  // oserdes reset
 
     // asynchronous reset macro
     xpm_cdc_async_rst #(

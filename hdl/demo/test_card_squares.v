@@ -1,20 +1,20 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
-// Project F: Display Controller Test Card
+// Project F: Display Controller Test Card: Squares
 // (C)2019 Will Green, Open Source Hardware released under the MIT License
 // Learn more at https://projectf.io
 
-module test_card #(
+module test_card_squares #(
     H_RES=640,
     V_RES=480
     )
     (
     input wire [15:0] i_x,
     input wire [15:0] i_y,
-    output wire o_red,
-    output wire o_green,
-    output wire o_blue
+    output wire [7:0] o_red,
+    output wire [7:0] o_green,
+    output wire [7:0] o_blue
     );
 
     localparam HR = H_RES;              // horizontal resolution (pixels)
@@ -49,7 +49,7 @@ module test_card #(
     wire lns_8 = (i_y >=        SY) & (i_y <= SY +  2*SQ) & ((i_x == SX + 8*SQ + 3*LS) | (i_x == SX + 10*SQ - 3*LS));
 
     // Colour Output
-    assign o_red    = lft | top | lns_1 | lns_4 | lns_5 | lns_8 | sq_b | sq_e;
-    assign o_green  = btm | top | lns_2 | lns_4 | lns_6 | lns_8 | sq_a | sq_d | sq_e;
-    assign o_blue   = rgt | top | lns_3 | lns_4 | lns_7 | lns_8 | sq_c | sq_e;
+    assign o_red    = {8{ lft | top | lns_1 | lns_4 | lns_5 | lns_8 | sq_b | sq_e }};
+    assign o_green  = {8{ btm | top | lns_2 | lns_4 | lns_6 | lns_8 | sq_a | sq_d | sq_e }};
+    assign o_blue   = {8{ rgt | top | lns_3 | lns_4 | lns_7 | lns_8 | sq_c | sq_e }};
 endmodule

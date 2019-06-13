@@ -12,14 +12,14 @@ module test_card_simple #(
     (
     input wire [15:0] i_x,
     input wire [15:0] i_y,
-    output wire o_red,
-    output wire o_green,
-    output wire o_blue
+    output wire [7:0] o_red,
+    output wire [7:0] o_green,
+    output wire [7:0] o_blue
     );
 
-    localparam HR = H_RES;              // horizontal resolution (pixels)
-    localparam VR = V_RES;              // vertical resolution (lines)
-    localparam BW = 16;                 // border width
+    localparam HR = H_RES;  // horizontal resolution (pixels)
+    localparam VR = V_RES;  // vertical resolution (lines)
+    localparam BW = 16;     // border width
 
     // Borders
     wire top = (i_x >=     0) & (i_y >=     0) & (i_x < HR) & (i_y < BW);
@@ -28,7 +28,7 @@ module test_card_simple #(
     wire rgt = (i_x >= HR-BW) & (i_y >=     0) & (i_x < HR) & (i_y < VR);
 
     // Colour Output
-    assign o_red    = lft | top;
-    assign o_green  = btm | top;
-    assign o_blue   = rgt | top;
+    assign o_red    = {8{lft | top}};
+    assign o_green  = {8{btm | top}};
+    assign o_blue   = {8{rgt | top}};
 endmodule
