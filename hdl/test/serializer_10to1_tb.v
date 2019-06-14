@@ -22,14 +22,17 @@ module serializer_10to1_tb();
     initial begin
         $display($time, " << Starting Simulation >>");
         clk <= 0;
-        clk_5x <= 1;
-        rst <= 1;
+        clk_5x <= 0;
+        rst <= 0;
         clk_lock <= 0;
 
-        #10
+        #2
+        rst <= 1;  // assert async
+
+        #18
         rst <= 0;
 
-        #10
+        #20
         clk_lock <=1;
         tmds_data_1 <= 10'b0110100110;
         tmds_data_2 <= 10'b1001011001;
