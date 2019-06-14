@@ -115,14 +115,20 @@ You can also see the full output from the [Python model](model/tmds-test-python.
 
 
 ## Resource Utilization
-The display controller is lightweight, fitting into small FPGAs. The following table shows utilization for Artix-7 using two of the included demos with simple and gradient test cards:
+The display controller is lightweight, fitting comfortably into even small FPGAs.
 
-                       Simple        Gradient
-    Interface        LUT     FF     LUT     FF
-    -------------------------------------------
-    DVI on FPGA      103     72     303     90
-    DVI BML 3-bit     69     32     TBC     TBC
-    DVI BML 24-bit   TBC    TBC     TBC     TBC
-    VGA               70     32     TBC     TBC
+The following table shows utilization of the display-controller with the gradient test card at a resolution of 640x480.
 
-For reference an Artix A35T has 20,800 LUT6 and 41,600 FF. Synthesized using Vivado 2019.1 with default options. Resolution was 1280x720 for 'DVI on FPGA' and 640x480 for DVI BML and VGA interfaces.
+                       Artix-7
+    Interface        LUT     FF
+    -----------------------------
+    DVI on FPGA      278      78
+    DVI BML 3-bit     49      32
+    DVI BML 24-bit   TBC     TBC
+    VGA 12-bit        67      32
+    -----------------------------
+    Synthesized and implemented with Vivado 2019.1 using default options.
+
+For comparison an Artix A35T has 20,800 LUT6 and 41,600 FF, while the tiny Spartan 7S6 has 3,752 LUT6 and 7,500 FF.
+
+NB. If you drive the "DVI on FPGA" display controller with a few fixed colours, such as the simple test bench, the optimizer removes a significant part of the design, resulting in misleadingly low utilization.

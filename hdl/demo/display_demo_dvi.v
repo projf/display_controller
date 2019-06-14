@@ -10,8 +10,8 @@
 //  * display_timings
 //  * dvi_generator
 //  * serializer_10to1
-//  * test_card_gradient or test_card_squares or test_card_simple
 //  * tmds_encoder_dvi
+//  * test_card_simple or another test card
 
 module display_demo_dvi(
     input  wire CLK,                // board clock: 100 MHz on Arty/Basys3/Nexys
@@ -88,12 +88,11 @@ module display_demo_dvi(
     wire [7:0] green;
     wire [7:0] blue;
 
-    // Test Card: Gradient - ENABLE ONE TEST CARD INSTANCE ONLY
-    test_card_gradient #(
-        .STEP(2)            // step right shift: 480=2, 720=2, 1080=3
-    )
-    test_card_inst (
-        .i_y(y),
+    // Test Card: Simple - ENABLE ONE TEST CARD INSTANCE ONLY
+    test_card_simple #(
+        .H_RES(1280)    // horizontal resolution
+    ) test_card_inst (
+        .i_x(x),
         .o_red(red),
         .o_green(green),
         .o_blue(blue)
@@ -112,14 +111,11 @@ module display_demo_dvi(
     //     .o_blue(blue)
     // );
 
-    // // Test Card: Simple - ENABLE ONE TEST CARD INSTANCE ONLY
-    // test_card_simple #(
-    //     .H_RES(1280),   // horizontal resolution
-    //     .V_RES(720)     // vertical resolution
-    // )
-    // test_card_inst (
-    //     .i_x(x),
-    //     .i_y(y),
+    // // Test Card: Gradient - ENABLE ONE TEST CARD INSTANCE ONLY
+    // localparam GRAD_STEP = 2;  // step right shift: 480=2, 720=2, 1080=3
+    // test_card_gradient test_card_inst (
+    //     .i_y(y[GRAD_STEP+7:GRAD_STEP]),
+    //     .i_x(x[5:0]),
     //     .o_red(red),
     //     .o_green(green),
     //     .o_blue(blue)
