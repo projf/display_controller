@@ -66,7 +66,7 @@ There are also three test cards that the demo modules can use:
 * **[Test Card Squares](hdl/demo/test_card_squares.v)** - squares and lines of different colours (1-bit per colour)
 * **[Test Card Gradient](hdl/demo/test_card_gradient.v)** - colour gradient (8-bit per colour)
 
-You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card` or `test_card_simple`. Comments in the demos provide settings for tested [resolutions](#display-resolution-support).
+You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and the test card you're using. Comments in the demos provide the parameters you need for the [supported resolutions](#display-resolution-support).
 
 
 ## Modules
