@@ -25,7 +25,7 @@ module test_card_simple #(H_RES=640) (
     wire b7 = (i_x >= HW * 7) & (i_x < HW * 8);
 
     // Colour Output
-    assign o_red    = {8{b0 | b1 | b5}} + {1'b0,{7{b6}}} + {2'b0,{6{b7}}};
-    assign o_green  = {8{b1 | b2 | b3}} + {1'b0,{7{b6}}} + {2'b0,{6{b7}}};
-    assign o_blue   = {8{b3 | b4 | b5}} + {1'b0,{7{b6}}} + {2'b0,{6{b7}}};
+    assign o_red    = {8{b0 | b1 | b5}} + {2'b0,{6{b6}}} + {b7, 7'b0};
+    assign o_green  = {8{b1 | b2 | b3}} + {2'b0,{6{b6}}} + {b7, 7'b0};
+    assign o_blue   = {8{b3 | b4 | b5}} + {2'b0,{6{b6}}} + {b7, 7'b0};
 endmodule
