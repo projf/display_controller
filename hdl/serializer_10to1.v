@@ -15,15 +15,19 @@ module serializer_10to1(
 
     // asynchronous reset
     reg rst_oserdes;            // oserdes reset (active high)
-    reg [2:0] rst_shf;          // reset shift reg
+    (* ASYNC_REG = "TRUE" *) reg [1:0] rst_shf;  // reset shift reg
+
+    initial rst_oserdes = 1'b1; // start of with reset asserted
+    initial rst_shf = 2'b11;    //  and reset shift reg populated
 
     always @(posedge i_clk or posedge i_rst)
     if (i_rst)
-        {rst_oserdes, rst_shf} <= 4'b1111;
+        {rst_oserdes, rst_shf} <= 3'b111;
     else
         {rst_oserdes, rst_shf} <= {rst_shf, 1'b0};
 
-    wire shift1, shift2;  // wires between oserdes
+    // use two OSERDES2 to serialize 10-bit TMDS data
+    wire shift1, shift2;  // wires between oserdes master and slave
 
     OSERDESE2 #(
         .DATA_RATE_OQ("DDR"),   // DDR, SDR
