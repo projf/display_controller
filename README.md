@@ -60,10 +60,11 @@ The [demo](hdl/demo) directory includes a demo for each supported interface:
 
 You can find the list of required modules for each demo in a comment at the top of its file. You'll also need suitable constraints, such as those from the Project F [hardware support](https://github.com/projf/hardware-support) repo.
 
-There are also two test cards that the demo modules can use:
+There are also three test cards that the demo modules can use:
 
-* **[Test Card](hdl/demo/test_card.v)** - generates a video test card based on provided resolution
-* **[Test Card Simple](hdl/demo/test_card_simple.v)** - generates a simple coloured border based on provided resolution
+* **[Test Card Simple](hdl/demo/test_card_simple.v)** - simple coloured border (1-bit per colour)
+* **[Test Card Squares](hdl/demo/test_card_squares.v)** - squares and lines of different colours (1-bit per colour)
+* **[Test Card Gradient](hdl/demo/test_card_gradient.v)** - colour gradient (8-bit per colour)
 
 You can adjust the demo resolution by changing the parameters for `display_clocks`, `display_timings`, and `test_card` or `test_card_simple`. Comments in the demos provide settings for tested [resolutions](#display-resolution-support).
 
