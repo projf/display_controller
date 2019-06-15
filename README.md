@@ -62,7 +62,7 @@ You can find the list of required modules for each demo in a comment at the top 
 
 There are also three test cards that the demo modules can use:
 
-* **[Test Card Simple](hdl/demo/test_card_simple.v)** - simple coloured border (1-bit per colour)
+* **[Test Card Simple](hdl/demo/test_card_simple.v)** - simple coloured border (1-bit per colour and two shades of grey)
 * **[Test Card Squares](hdl/demo/test_card_squares.v)** - squares and lines of different colours (1-bit per colour)
 * **[Test Card Gradient](hdl/demo/test_card_gradient.v)** - colour gradient (8-bit per colour)
 
@@ -123,7 +123,7 @@ The following table shows utilization of the display-controller with the gradien
                        Artix-7
     Interface        LUT     FF
     -----------------------------
-    DVI on FPGA      278      78
+    DVI on FPGA      278      86
     DVI BML 3-bit     49      32
     DVI BML 24-bit   TBC     TBC
     VGA 12-bit        67      32
