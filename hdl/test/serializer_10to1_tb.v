@@ -26,17 +26,39 @@ module serializer_10to1_tb();
         rst <= 0;
         clk_lock <= 0;
 
-        #2
-        rst <= 1;  // assert async
+        #1.5
+        rst <= 1;  // assert reset async
 
-        #18
+        #18.5
         rst <= 0;
 
         #20
-        clk_lock <=1;
+        clk_lock <= 1;
         tmds_data_1 <= 10'b0110100110;
         tmds_data_2 <= 10'b1001011001;
         tmds_data_3 <= 10'b1100000010;
+
+        #100
+        tmds_data_1 <= 10'b1111111111;
+        tmds_data_2 <= 10'b1010101010;
+        tmds_data_3 <= 10'b0000000000;
+
+        #2
+        clk_lock <= 0;  // simulate loss of clock lock
+
+        #23
+        clk_lock <= 1;
+
+        #125
+        tmds_data_1 <= 10'b0110100110;
+        tmds_data_2 <= 10'b1001011001;
+        tmds_data_3 <= 10'b1100000010;
+
+        #101.25
+        rst <= 1;  // assert reset async
+
+        #11.5
+        rst <= 0;  // de-assert reset async
     end
 
     serializer_10to1 serialize_data_1 (
