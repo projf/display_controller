@@ -11,10 +11,8 @@ module display_timings_tb();
     reg rst_480p;
     reg clk_480p;
 
-    wire [15:0] x_480p;  // horizontal screen position (active pixels)
-    wire [15:0] y_480p;  // vertical screen position (active pixels)
-    wire [15:0] h_480p;  // horizontal beam position (including blanking)
-    wire [15:0] v_480p;  // vertical beam position (including blanking)
+    wire [15:0] sx_480p; // horizontal screen position
+    wire [15:0] sy_480p; // vertical screen position
     wire h_sync_480p;    // horizontal sync
     wire v_sync_480p;    // vertical sync
     wire de_480p;        // display enable: high during active video
@@ -33,16 +31,14 @@ module display_timings_tb();
         .V_POL(0)
     )
     display_timings_480p (
-        .i_pixclk(clk_480p),
+        .i_pix_clk(clk_480p),
         .i_rst(rst_480p),
         .o_hs(h_sync_480p),
         .o_vs(v_sync_480p),
         .o_de(de_480p),
         .o_frame(frame_480p),
-        .o_h(h_480p),
-        .o_v(v_480p),
-        .o_x(x_480p),
-        .o_y(y_480p)
+        .o_sx(sx_480p),
+        .o_sy(sy_480p)
     );
 
 
@@ -50,10 +46,8 @@ module display_timings_tb();
     reg rst_720p;
     reg clk_720p;
 
-    wire [15:0] x_720p;  // horizontal screen position (active pixels)
-    wire [15:0] y_720p;  // vertical screen position (active pixels)
-    wire [15:0] h_720p;  // horizontal beam position (including blanking)
-    wire [15:0] v_720p;  // vertical beam position (including blanking)
+    wire [15:0] sx_720p; // horizontal screen position
+    wire [15:0] sy_720p; // vertical screen position
     wire h_sync_720p;    // horizontal sync
     wire v_sync_720p;    // vertical sync
     wire de_720p;        // display enable: high during active video
@@ -72,16 +66,14 @@ module display_timings_tb();
         .V_POL(1)
     )
     display_timings_720p (
-        .i_pixclk(clk_720p),
+        .i_pix_clk(clk_720p),
         .i_rst(rst_720p),
         .o_hs(h_sync_720p),
         .o_vs(v_sync_720p),
         .o_de(de_720p),
         .o_frame(frame_720p),
-        .o_h(h_720p),
-        .o_v(v_720p),
-        .o_x(x_720p),
-        .o_y(y_720p)
+        .o_sx(sx_720p),
+        .o_sy(sy_720p)
     );
 
 

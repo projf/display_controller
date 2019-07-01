@@ -46,8 +46,8 @@ module display_demo_dvi_pmod3(
     );
 
     // Display Timings
-    wire [15:0] x;                  // horizontal pixel position
-    wire [15:0] y;                  // vertical pixel position
+    wire [15:0] sx;                 // horizontal pixel position
+    wire [15:0] sy;                 // vertical pixel position
     wire h_sync;                    // horizontal sync
     wire v_sync;                    // vertical sync
     wire de;                        // display enable
@@ -66,16 +66,14 @@ module display_demo_dvi_pmod3(
         .V_POL(0)                   //       0        1        1         1
     )
     display_timings_inst (
-        .i_pixclk(pix_clk),
+        .i_pix_clk(pix_clk),
         .i_rst(rst),
         .o_hs(h_sync),
         .o_vs(v_sync),
         .o_de(de),
         .o_frame(frame),
-        .o_h(),
-        .o_v(),
-        .o_x(x),
-        .o_y(y)
+        .o_sx(sx),
+        .o_sy(sy)
     );
 
     // test card colour output
@@ -87,7 +85,7 @@ module display_demo_dvi_pmod3(
     test_card_simple #(
         .H_RES(640)    // horizontal resolution
     ) test_card_inst (
-        .i_x(x),
+        .i_x(sx),
         .o_red(red),
         .o_green(green),
         .o_blue(blue)
@@ -99,8 +97,8 @@ module display_demo_dvi_pmod3(
     //     .V_RES(480)     // vertical resolution
     // )
     // test_card_inst (
-    //     .i_x(x),
-    //     .i_y(y),
+    //     .i_x(sx),
+    //     .i_y(sy),
     //     .o_red(red),
     //     .o_green(green),
     //     .o_blue(blue)
@@ -109,8 +107,8 @@ module display_demo_dvi_pmod3(
     // // Test Card: Gradient - ENABLE ONE TEST CARD INSTANCE ONLY
     // localparam GRAD_STEP = 2;  // step right shift: 480=2, 720=2, 1080=3
     // test_card_gradient test_card_inst (
-    //     .i_x(x[5:0]),
-    //     .i_y(y[GRAD_STEP+7:GRAD_STEP]),
+    //     .i_x(sx[5:0]),
+    //     .i_y(sy[GRAD_STEP+7:GRAD_STEP]),
     //     .o_red(red),
     //     .o_green(green),
     //     .o_blue(blue)

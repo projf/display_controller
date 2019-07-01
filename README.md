@@ -6,6 +6,8 @@ To get started take a look at the [demos](#demos) then read [modules](doc/module
 
 For tutorials and further information visit [projectf.io](https://projectf.io).
 
+_NB. Pixel coordinates are now signed values and have been renamed; see module documentation for [display timings](doc/modules.md#display-timings)._
+
 ## Contents
 
 - [Display Interface Support](#display-interface-support)
@@ -124,9 +126,9 @@ The following table shows utilization of the display-controller with the gradien
     Interface        LUT     FF
     -----------------------------
     DVI on FPGA      278      86
-    DVI BML 3-bit     49      32
+    DVI BML 3-bit     86      32
     DVI BML 24-bit   TBC     TBC
-    VGA 12-bit        67      32
+    VGA 12-bit        92      32
     -----------------------------
     Synthesized and implemented with Vivado 2019.1 using default options.
 

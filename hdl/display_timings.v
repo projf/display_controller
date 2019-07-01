@@ -20,70 +20,61 @@ module display_timings #(
     V_POL=0         // vertical sync polarity (0:neg, 1:pos)
     )
     (
-    input  wire i_pixclk,       // pixel clock
-    input  wire i_rst,          // reset: restarts frame (active high)
-    output wire o_hs,           // horizontal sync
-    output wire o_vs,           // vertical sync
-    output wire o_de,           // display enable: high during active video
-    output wire o_frame,        // high for one tick at the start of each frame
-    output reg  [15:0] o_h,     // horizontal beam position (including blanking)
-    output reg  [15:0] o_v,     // vertical beam position (including blanking)
-    output wire [15:0] o_x,     // horizontal screen position (active pixels)
-    output wire [15:0] o_y      // vertical screen position (active pixels)
+    input  wire i_pix_clk,          // pixel clock
+    input  wire i_rst,              // reset: restarts frame (active high)
+    output wire o_hs,               // horizontal sync
+    output wire o_vs,               // vertical sync
+    output wire o_de,               // display enable: high during active video
+    output wire o_frame,            // high for one tick at the start of each frame
+    output reg signed [15:0] o_sx,  // horizontal beam position (including blanking)
+    output reg signed [15:0] o_sy   // vertical beam position (including blanking)
     );
 
     // Horizontal: sync, active, and pixels
-    localparam HS_STA = H_FP - 1;           // sync start (first pixel is 0)
-    localparam HS_END = HS_STA + H_SYNC;    // sync end
-    localparam HA_STA = HS_END + H_BP;      // active start
-    localparam HA_END = HA_STA + H_RES;     // active end
-    localparam LINE   = HA_END;             // line pixels
+    localparam signed H_STA  = 0 - H_FP - H_SYNC - H_BP;    // horizontal start
+    localparam signed HS_STA = H_STA + H_FP;                // sync start
+    localparam signed HS_END = HS_STA + H_SYNC;             // sync end
+    localparam signed HA_STA = 0;                           // active start = 0
+    localparam signed HA_END = H_RES - 1;                   // active end
 
     // Vertical: sync, active, and pixels
-    localparam VS_STA = V_FP - 1;           // sync start (first line is 0)
-    localparam VS_END = VS_STA + V_SYNC;    // sync end
-    localparam VA_STA = VS_END + V_BP;      // active start
-    localparam VA_END = VA_STA + V_RES;     // active end
-    localparam FRAME  = VA_END;             // frame lines
+    localparam signed V_STA  = 0 - V_FP - V_SYNC - V_BP;    // vertical start
+    localparam signed VS_STA = V_STA + V_FP;                // sync start
+    localparam signed VS_END = VS_STA + V_SYNC;             // sync end
+    localparam signed VA_STA = 0;                           // active start
+    localparam signed VA_END = V_RES - 1;                   // active end
 
     // generate sync signals with correct polarity
-    assign o_hs = H_POL ? (o_h > HS_STA && o_h <= HS_END)
-        : ~(o_h > HS_STA && o_h <= HS_END);
-    assign o_vs = V_POL ? (o_v > VS_STA && o_v <= VS_END)
-        : ~(o_v > VS_STA && o_v <= VS_END);
+    assign o_hs = H_POL ? (o_sx > HS_STA && o_sx <= HS_END)
+        : ~(o_sx > HS_STA && o_sx <= HS_END);
+    assign o_vs = V_POL ? (o_sy > VS_STA && o_sy <= VS_END)
+        : ~(o_sy > VS_STA && o_sy <= VS_END);
 
     // display enable: high during active period
-    assign o_de = o_h > HA_STA && o_h <= HA_END
-        && o_v > VA_STA && o_v <= VA_END;
-
-    // keep o_x and o_y bound within active pixels
-    assign o_x = (o_de && o_h > HA_STA && o_h <= HA_END) ?
-                    o_h - (HA_STA + 1): 0;
-    assign o_y = (o_de && o_v > VA_STA && o_v <= VA_END) ?
-                    o_v - (VA_STA + 1): 0;
+    assign o_de = o_sx >= 0 && o_sy >= 0;
 
     // o_frame: high for one tick at the start of each frame
-    assign o_frame = (o_v == 0 && o_h == 0);
+    assign o_frame = (o_sy == V_STA && o_sx == H_STA);
 
-    always @ (posedge i_pixclk)
+    always @ (posedge i_pix_clk)
     begin
         if (i_rst)  // reset to start of frame
         begin
-            o_h <= 0;
-            o_v <= 0;
+            o_sx <= H_STA;
+            o_sy <= V_STA;
         end
         else
         begin
-            if (o_h == LINE)  // end of line
+            if (o_sx == HA_END)  // end of line
             begin
-                o_h <= 0;
-                if (o_v == FRAME)  // end of frame
-                    o_v <= 0;
+                o_sx <= H_STA;
+                if (o_sy == VA_END)  // end of frame
+                    o_sy <= V_STA;
                 else
-                    o_v <= o_v + 1;
+                    o_sy <= o_sy + 16'sh1;
             end
             else
-                o_h <= o_h + 1;
+                o_sx <= o_sx + 16'sh1;
         end
     end
 endmodule
