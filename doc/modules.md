@@ -95,9 +95,13 @@ The pixel clock must be suitable for the timings given in the parameters (see di
 * `o_sx [15:0]` - horizontal screen position (signed)
 * `o_sy [15:0]` - vertical screen position (signed)
 
-The current beam position is given by `(sx, sy)`. `sx` and `sy` are *signed* 16-bit values. When display enable (`o_de`) is high these values indicate the active drawing pixel and are always positive. During the blanking interval one or both of `sx` and `sy` will be negative. This allows you to prepare for drawing, e.g. if you have a two cycle latency to retrieve a pixel's colour you can request the data for the first pixel of a line when `sx == -2`.
+The current beam position is given by `(o_sx,o_sy)`. `o_sx` and `o_sy` are **signed** 16-bit values.
+
+When display enable (`o_de`) is high these values provide the active drawing pixel and are always positive. During the blanking interval one or both of `o_sx` and `o_sy` will be negative. This allows you to prepare for drawing, e.g. if you have a two cycle latency to retrieve a pixel's colour you can request the data for the first pixel of a line when `o_sx == -2`.
 
 ![](display-timings.jpg?raw=true "")
+
+At the start of a 1280x720p60 frame, `o_sx == -370` and `o_sy == -45`. Active drawing starts at `o_sx == 0` and `o_sy == 0` and the final coordinates are `o_sx == 1279` and `o_sy == 719`.
 
 Horizontal and vertical sync may be active high or low depending on the display mode; this is controlled using the `H_POL` and `V_POL` parameters (below).
 
