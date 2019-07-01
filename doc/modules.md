@@ -77,7 +77,7 @@ The [demo](/hdl/demo) modules include appropriate parameters for four standard p
 
 
 ## Display Timings
-The display timings generator turns timing parameters into appropriately timed sync pulses and provides the current screen co-ordinates. Accurate timings depend on an accurate [pixel clock](#display-clocks). ([display_timings.v](/hdl/display_timings.v))
+The display timings generator turns timing parameters into appropriately timed sync pulses and provides the current screen coordinates. Accurate timings depend on an accurate [pixel clock](#display-clocks). ([display_timings.v](/hdl/display_timings.v))
 
 ### Inputs
 
@@ -97,7 +97,7 @@ The pixel clock must be suitable for the timings given in the parameters (see di
 
 The current beam position is given by `(sx, sy)`. `sx` and `sy` are *signed* 16-bit values. When display enable (`o_de`) is high these values indicate the active drawing pixel and are always positive. During the blanking interval one or both of `sx` and `sy` will be negative. This allows you to prepare for drawing, e.g. if you have a two cycle latency to retrieve a pixel's colour you can request the data for the first pixel of a line when `sx == -2`.
 
-![](display-controller-hv-xy.jpg?raw=true "")
+![](display-timings.jpg?raw=true "")
 
 Horizontal and vertical sync may be active high or low depending on the display mode; this is controlled using the `H_POL` and `V_POL` parameters (below).
 

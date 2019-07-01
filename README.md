@@ -35,6 +35,8 @@ Direct TMDS generation on FPGA requires high-frequency clocks (742.5 MHz for 720
 
 The Black Mesa Labs (BML) Pmod is based on the Texas Instruments [TFP410](http://www.ti.com/product/TFP410). The Pmod is restricted to standard DVI features but allows even tiny FPGAs to support DVI signalling. As of February 2019, there is an unresolved issue when using a BML DVI Pmod with HDMI displays: some displays report a signal error and show nothing. This issue isn't confined to Project F but has also been reported by Black Mesa Labs themselves.
 
+![](doc/display-pmods.jpg?raw=true "")
+
 
 ## Display Resolution Support
 The following four display resolutions are tested and included by default (all at 60 Hz refresh rate):
