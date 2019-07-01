@@ -77,11 +77,11 @@ The [demo](/hdl/demo) modules include appropriate parameters for four standard p
 
 
 ## Display Timings
-The display timings generator turns timing parameters into appropriately timed sync pulses and provides the current screen co-ordinates. Accurate timings depend on an accurate [pixel clock](#display-clocks). ([display_timings.v](/hdl/display_timings.v))
+The display timings generator turns timing parameters into appropriately timed sync pulses and provides the current screen coordinates. Accurate timings depend on an accurate [pixel clock](#display-clocks). ([display_timings.v](/hdl/display_timings.v))
 
 ### Inputs
 
-* `i_pixclk` - pixel clock
+* `i_pix_clk` - pixel clock
 * `i_rst` - reset (active high)
 
 The pixel clock must be suitable for the timings given in the parameters (see display clocks, above).
@@ -92,18 +92,16 @@ The pixel clock must be suitable for the timings given in the parameters (see di
 * `o_vs` - vertical sync
 * `o_de` - display enable: high during active video
 * `o_frame` - high for one tick at the start of each frame
-* `o_h [15:0]` - horizontal beam position (including blanking)
-* `o_v [15:0]` - vertical beam position (including blanking)
-* `o_x [15:0]` - horizontal screen position (active pixels)
-* `o_y [15:0]` - vertical screen position (active pixels)
+* `o_sx [15:0]` - horizontal screen position (signed)
+* `o_sy [15:0]` - vertical screen position (signed)
 
-The positional outputs `(h,v)` and `(x,y)` allow you to determine the current pixel AKA "beam position". The values provided by `h` & `v `include the blanking interval, while `x` & `y` only include valid on-screen positions. For simple drawing or bitmap display you can use `(x,y)` and safely ignore `(h,v)`. However, if you're doing calculations in real time "racing the beam", then you'll want to perform actions in the blanking interval, which is where (h,v) comes in.
+The current beam position is given by `(o_sx,o_sy)`. `o_sx` and `o_sy` are **signed** 16-bit values.
 
-Project F considers blanking intervals to occur _before_ active pixels. At the start of a frame (indicated by the `o_frame` signal), you have the blanking intervals in which to work before active pixel drawing occurs. The following sketch this for 1280x720p60 (other resolutions work in the same way):
+When display enable (`o_de`) is high, these values provide the active drawing pixel and are always positive. During the blanking interval, one or both of `o_sx` and `o_sy` will be negative. This allows you to prepare for drawing, e.g. if you have a two cycle latency to retrieve a pixel's colour you can request the data for the first pixel of a line when `o_sx == -2`.
 
-![](display-controller-hv-xy.jpg?raw=true "")
+![](display-timings.jpg?raw=true "")
 
-NB. `x` and `y` are 0 during the blanking interval.
+At the start of a 1280x720p60 frame, `o_sx == -370` and `o_sy == -45`. Active drawing starts at `o_sx == 0` and `o_sy == 0` and the final coordinates are `o_sx == 1279` and `o_sy == 719`.
 
 Horizontal and vertical sync may be active high or low depending on the display mode; this is controlled using the `H_POL` and `V_POL` parameters (below).
 

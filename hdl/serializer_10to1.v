@@ -17,7 +17,7 @@ module serializer_10to1(
     reg rst_oserdes;            // oserdes reset (active high)
     (* ASYNC_REG = "TRUE" *) reg [1:0] rst_shf;  // reset shift reg
 
-    initial rst_oserdes = 1'b1; // start of with reset asserted
+    initial rst_oserdes = 1'b1; // start off with reset asserted
     initial rst_shf = 2'b11;    //  and reset shift reg populated
 
     always @(posedge i_clk or posedge i_rst)
