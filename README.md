@@ -122,12 +122,12 @@ You can also see the full output from the [Python model](model/tmds-test-python.
 ## Resource Utilization
 The display controller is lightweight, fitting comfortably into even small FPGAs.
 
-The following table shows utilization of the display-controller with the gradient test card at a resolution of 640x480.
+The following table shows utilization of the display-controller with the gradient test card at a resolution of 640x480. Utilization is pretty much invariant with resolution.
 
                        Artix-7
     Interface        LUT     FF
     -----------------------------
-    DVI on FPGA      278      86
+    DVI on FPGA      281      86
     DVI BML 3-bit     86      32
     DVI BML 24-bit   TBC     TBC
     VGA 12-bit        92      32
