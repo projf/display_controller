@@ -97,7 +97,7 @@ The pixel clock must be suitable for the timings given in the parameters (see di
 
 The current beam position is given by `(o_sx,o_sy)`. `o_sx` and `o_sy` are **signed** 16-bit values.
 
-When display enable (`o_de`) is high these values provide the active drawing pixel and are always positive. During the blanking interval one or both of `o_sx` and `o_sy` will be negative. This allows you to prepare for drawing, e.g. if you have a two cycle latency to retrieve a pixel's colour you can request the data for the first pixel of a line when `o_sx == -2`.
+When display enable (`o_de`) is high, these values provide the active drawing pixel and are always positive. During the blanking interval, one or both of `o_sx` and `o_sy` will be negative. This allows you to prepare for drawing, e.g. if you have a two cycle latency to retrieve a pixel's colour you can request the data for the first pixel of a line when `o_sx == -2`.
 
 ![](display-timings.jpg?raw=true "")
 

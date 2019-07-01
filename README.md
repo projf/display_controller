@@ -4,7 +4,7 @@ The Project F display controller makes it easy to add video output to FPGA proje
 
 To get started take a look at the [demos](#demos) then read [modules](doc/modules.md) for the display controller interfaces and parameters. The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. If you want advice on adapting this design to other FPGAs, then take a look at [porting](doc/porting.md).
 
-For tutorials and further information visit [projectf.io](https://projectf.io).
+For tutorials and further information, visit [projectf.io](https://projectf.io).
 
 _NB. Pixel coordinates are now signed values and have been renamed; see module documentation for [display timings](doc/modules.md#display-timings)._
 
@@ -90,7 +90,7 @@ Details on module interfaces can be found in the [modules](doc/modules.md) doc.
 
 ## Testing
 
-If it isn't tested, it doesn't work. Project F tests its designs in simulation and on real hardware. For the display controller you can use the included [test benches](hdl/test) and [Python TMDS model](#tmds-encoder-model) to exercise the design.
+If it isn't tested, it doesn't work. Project F tests its designs in simulation and on real hardware. For the display controller, you can use the included [test benches](hdl/test) and [Python TMDS model](#tmds-encoder-model) to exercise the design.
 
 We haven't formally verified the design yet, but plan to do this for the display timings and TMDS encoder during 2019. If you're interested in learning more about formal verification, check out Clifford Wolf's [Formal Verification with SymbiYosys and Yosys-SMTBMC](http://www.clifford.at/papers/2017/smtbmc-sby/).
 
@@ -134,6 +134,6 @@ The following table shows utilization of the display-controller with the gradien
     -----------------------------
     Synthesized and implemented with Vivado 2019.1 using default options.
 
-For comparison an Artix A35T has 20,800 LUT6 and 41,600 FF, while the tiny Spartan 7S6 has 3,752 LUT6 and 7,500 FF.
+For comparison, an Artix A35T has 20,800 LUT6 and 41,600 FF, while the tiny Spartan 7S6 has 3,752 LUT6 and 7,500 FF.
 
 NB. If you drive the "DVI on FPGA" display controller with a few fixed colours, such as the simple test bench, the optimizer removes a significant part of the design, resulting in misleadingly low utilization.
