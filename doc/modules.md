@@ -73,11 +73,11 @@ For example, 720p60:
      74.25 MHz = (100 MHz * 37.125 / 5) / 10
     371.25 MHz = (100 MHz * 37.125 / 5) /  2
 
-The [demo](/hdl/demo) modules include appropriate parameters for four standard pixel clock to get you started.
+The [demo](/hdl/demo) modules include appropriate parameters for four standard pixel clocks to get you started.
 
 
 ## Display Timings
-The display timings generator turns timing parameters into appropriately timed sync pulses and provides the current screen coordinates. Accurate timings depend on an accurate [pixel clock](#display-clocks). ([display_timings.v](/hdl/display_timings.v))
+The display timings module turns timing parameters into appropriately timed sync pulses and provides the current screen coordinates. Accurate timings depend on an accurate [pixel clock](#display-clocks). ([display_timings.v](/hdl/display_timings.v))
 
 ### Inputs
 
