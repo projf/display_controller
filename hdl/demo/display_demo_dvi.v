@@ -10,6 +10,7 @@
 //  * display_timings
 //  * dvi_generator
 //  * serializer_10to1
+//  * async_reset
 //  * tmds_encoder_dvi
 //  * test_card_simple or another test card
 

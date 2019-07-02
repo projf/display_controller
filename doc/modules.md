@@ -1,6 +1,6 @@
 # Display Controller Modules
 
-The display controller consists of five core modules. This document describes the interfaces for the three you interact with: `display_clocks`, `display_timings` and `dvi_generator`. The other two modules are used internally by `dvi_generator`. You can see the modules being put to use in the [demos](/hdl/demo) and [test benches](/hdl/test).
+The display controller consists of six core modules. This document describes the interfaces for the three you interact with: `display_clocks`, `display_timings` and `dvi_generator`. The other three modules are used internally by `dvi_generator`. You can see the modules being put to use in the [demos](/hdl/demo) and [test benches](/hdl/test).
 
 The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. If you want advice on adapting this design to other FPGAs, then take a look at [porting](/doc/porting.md).
 

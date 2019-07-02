@@ -8,23 +8,10 @@
 module serializer_10to1(
     input  wire i_clk,          // parallel clock
     input  wire i_clk_hs,       // high-speed clock (5 x i_clk when using DDR)
-    input  wire i_rst,          // reset (active high)
+    input  wire i_rst_oserdes,  // reset from async reset (active high)
     input  wire [9:0] i_data,   // input parallel data
     output wire o_data          // output serial data
     );
-
-    // asynchronous reset
-    reg rst_oserdes;            // oserdes reset (active high)
-    (* ASYNC_REG = "TRUE" *) reg [1:0] rst_shf;  // reset shift reg
-
-    initial rst_oserdes = 1'b1; // start off with reset asserted
-    initial rst_shf = 2'b11;    //  and reset shift reg populated
-
-    always @(posedge i_clk or posedge i_rst)
-    if (i_rst)
-        {rst_oserdes, rst_shf} <= 3'b111;
-    else
-        {rst_oserdes, rst_shf} <= {rst_shf, 1'b0};
 
     // use two OSERDES2 to serialize 10-bit TMDS data
     wire shift1, shift2;  // wires between oserdes master and slave
@@ -65,7 +52,7 @@ module serializer_10to1(
         .D7(i_data[6]),
         .D8(i_data[7]),
         .OCE(1'b1),             // 1-bit input: Output data clock enable
-        .RST(rst_oserdes),      // 1-bit input: Reset
+        .RST(i_rst_oserdes),    // 1-bit input: Reset
         // SHIFTIN1 / SHIFTIN2: 1-bit (each) input: Data input expansion (1-bit each)
         .SHIFTIN1(shift1),
         .SHIFTIN2(shift2),
@@ -114,7 +101,7 @@ module serializer_10to1(
         .D7(1'b0),
         .D8(1'b0),
         .OCE(1'b1),             // 1-bit input: Output data clock enable
-        .RST(rst_oserdes),      // 1-bit input: Reset
+        .RST(i_rst_oserdes),    // 1-bit input: Reset
         // SHIFTIN1 / SHIFTIN2: 1-bit (each) input: Data input expansion (1-bit each)
         .SHIFTIN1(1'b0),
         .SHIFTIN2(1'b0),

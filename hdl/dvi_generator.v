@@ -52,10 +52,18 @@ module dvi_generator(
         .o_tmds(tmds_ch2)
     );
 
+    // common async reset for serdes
+    wire rst_oserdes;
+    async_reset async_reset_instance (
+        .i_clk(i_pix_clk),
+        .i_rst(i_rst | ~i_clk_lock),
+        .o_rst(rst_oserdes)
+    );
+
     serializer_10to1 serialize_ch0 (
         .i_clk(i_pix_clk),
         .i_clk_hs(i_pix_clk_5x),
-        .i_rst(i_rst | ~i_clk_lock),
+        .i_rst_oserdes(rst_oserdes),
         .i_data(tmds_ch0),
         .o_data(o_tmds_ch0_serial)
     );
@@ -63,7 +71,7 @@ module dvi_generator(
     serializer_10to1 serialize_ch1 (
         .i_clk(i_pix_clk),
         .i_clk_hs(i_pix_clk_5x),
-        .i_rst(i_rst | ~i_clk_lock),
+        .i_rst_oserdes(rst_oserdes),
         .i_data(tmds_ch1),
         .o_data(o_tmds_ch1_serial)
     );
@@ -71,7 +79,7 @@ module dvi_generator(
     serializer_10to1 serialize_ch2 (
         .i_clk(i_pix_clk),
         .i_clk_hs(i_pix_clk_5x),
-        .i_rst(i_rst | ~i_clk_lock),
+        .i_rst_oserdes(rst_oserdes),
         .i_data(tmds_ch2),
         .o_data(o_tmds_ch2_serial)
     );
@@ -79,7 +87,7 @@ module dvi_generator(
     serializer_10to1 serialize_chc (
         .i_clk(i_pix_clk),
         .i_clk_hs(i_pix_clk_5x),
-        .i_rst(i_rst | ~i_clk_lock),
+        .i_rst_oserdes(rst_oserdes),
         .i_data(10'b0000011111),
         .o_data(o_tmds_chc_serial)
     );

@@ -127,7 +127,7 @@ The following table shows utilization of the display-controller with the gradien
                        Artix-7
     Interface        LUT     FF
     -----------------------------
-    DVI on FPGA      281      86
+    DVI on FPGA      282      77
     DVI BML 3-bit     86      32
     DVI BML 24-bit   TBC     TBC
     VGA 12-bit        92      32
