@@ -34,7 +34,7 @@ module display_timings #(
     localparam signed H_STA  = 0 - H_FP - H_SYNC - H_BP;    // horizontal start
     localparam signed HS_STA = H_STA + H_FP;                // sync start
     localparam signed HS_END = HS_STA + H_SYNC;             // sync end
-    localparam signed HA_STA = 0;                           // active start = 0
+    localparam signed HA_STA = 0;                           // active start
     localparam signed HA_END = H_RES - 1;                   // active end
 
     // Vertical: sync, active, and pixels
@@ -51,7 +51,7 @@ module display_timings #(
         : ~(o_sy > VS_STA && o_sy <= VS_END);
 
     // display enable: high during active period
-    assign o_de = o_sx >= 0 && o_sy >= 0;
+    assign o_de = (o_sx >= 0 && o_sy >= 0);
 
     // o_frame: high for one tick at the start of each frame
     assign o_frame = (o_sy == V_STA && o_sx == H_STA);
