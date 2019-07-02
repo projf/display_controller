@@ -12,6 +12,7 @@ module serializer_10to1_tb();
     reg clk_5x;
     reg clk_lock;  // clocks locked?
 
+    wire rst_oserdes;
     reg [9:0] tmds_data_1;
     reg [9:0] tmds_data_2;
     reg [9:0] tmds_data_3;
@@ -61,10 +62,17 @@ module serializer_10to1_tb();
         rst <= 0;  // de-assert reset async
     end
 
+    // common async reset for serdes
+    async_reset async_reset_instance (
+        .i_clk(clk),
+        .i_rst(rst | ~clk_lock),
+        .o_rst(rst_oserdes)
+    );
+
     serializer_10to1 serialize_data_1 (
         .i_clk(clk),
         .i_clk_hs(clk_5x),
-        .i_rst(rst | ~clk_lock),
+        .i_rst_oserdes(rst_oserdes),
         .i_data(tmds_data_1),
         .o_data(tmds_data_1_serial)
     );
@@ -72,7 +80,7 @@ module serializer_10to1_tb();
     serializer_10to1 serialize_data_2 (
         .i_clk(clk),
         .i_clk_hs(clk_5x),
-        .i_rst(rst | ~clk_lock),
+        .i_rst_oserdes(rst_oserdes),
         .i_data(tmds_data_2),
         .o_data(tmds_data_2_serial)
     );
@@ -80,7 +88,7 @@ module serializer_10to1_tb();
      serializer_10to1 serialize_data_3 (
         .i_clk(clk),
         .i_clk_hs(clk_5x),
-        .i_rst(rst | ~clk_lock),
+        .i_rst_oserdes(rst_oserdes),
         .i_data(tmds_data_3),
         .o_data(tmds_data_3_serial)
     );
