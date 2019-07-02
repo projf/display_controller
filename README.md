@@ -94,6 +94,7 @@ If it isn't tested, it doesn't work. Project F tests its designs in simulation a
 
 We haven't formally verified the design yet, but plan to do this for the display timings and TMDS encoder during 2019. If you're interested in learning more about formal verification, check out Clifford Wolf's [Formal Verification with SymbiYosys and Yosys-SMTBMC](http://www.clifford.at/papers/2017/smtbmc-sby/).
 
+![](doc/tmds-serializer-waveform.png?raw=true "")
 
 ## TMDS Encoder Model
 The display controller includes a simple [Python model](model/tmds.py) to help with TMDS encoder development.
