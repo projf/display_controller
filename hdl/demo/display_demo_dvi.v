@@ -52,8 +52,8 @@ module display_demo_dvi(
     );
 
     // Display Timings
-    wire [15:0] sx;                 // horizontal screen position
-    wire [15:0] sy;                 // vertical screen position
+    wire signed [15:0] sx;          // horizontal screen position (signed)
+    wire signed [15:0] sy;          // vertical screen position (signed)
     wire h_sync;                    // horizontal sync
     wire v_sync;                    // vertical sync
     wire de;                        // display enable

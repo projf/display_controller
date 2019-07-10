@@ -9,8 +9,8 @@ module test_card_squares #(
     H_RES=640,
     V_RES=480
     ) (
-    input wire [15:0] i_x,
-    input wire [15:0] i_y,
+    input wire signed [15:0] i_x,
+    input wire signed [15:0] i_y,
     output wire [7:0] o_red,
     output wire [7:0] o_green,
     output wire [7:0] o_blue
