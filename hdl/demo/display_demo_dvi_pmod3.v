@@ -46,8 +46,8 @@ module display_demo_dvi_pmod3(
     );
 
     // Display Timings
-    wire [15:0] sx;                 // horizontal pixel position
-    wire [15:0] sy;                 // vertical pixel position
+    wire signed [15:0] sx;          // horizontal screen position (signed)
+    wire signed [15:0] sy;          // vertical screen position (signed)
     wire h_sync;                    // horizontal sync
     wire v_sync;                    // vertical sync
     wire de;                        // display enable
