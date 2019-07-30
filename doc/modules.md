@@ -1,6 +1,6 @@
 # Display Controller Modules
 
-The display controller consists of six core modules. This document describes the interfaces for the three you interact with: `display_clocks`, `display_timings` and `dvi_generator`. The other three modules are used internally by `dvi_generator`. You can see the modules being put to use in the [demos](/hdl/demo) and [test benches](/hdl/test).
+The display controller consists of six core modules. This document describes the interfaces for the three you interact with: `display_clocks`, `display_timings` and `dvi_generator`. The other three modules are used internally by `dvi_generator`. You can see the modules being put to use in the [demos](/rtl/demo) and [test benches](/rtl/test).
 
 The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. If you want advice on adapting this design to other FPGAs, then take a look at [porting](/doc/porting.md).
 
@@ -10,9 +10,9 @@ See [README](/README.md) for more documentation.
 ## Contents
 
 - **[Architecture](#architecture)**
-- **[Display Clocks](#display-clocks)** ([hdl](/hdl/display_clocks.v)) - pixel and high-speed clocks for TMDS
-- **[Display Timings](#display-timings)** ([hdl](/hdl/display_timings.v)) - generates display timings, including horizontal and vertical sync
-- **[DVI Generator](#dvi-generator)** ([hdl](/hdl/dvi_generator.v)) - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
+- **[Display Clocks](#display-clocks)** ([RTL](/rtl/display_clocks.v)) - pixel and high-speed clocks for TMDS
+- **[Display Timings](#display-timings)** ([RTL](/rtl/display_timings.v)) - generates display timings, including horizontal and vertical sync
+- **[DVI Generator](#dvi-generator)** ([RTL](/rtl/dvi_generator.v)) - uses `serializer_10to1` and `tmds_encode_dvi` to generate a DVI signal
 
 
 ## Architecture
@@ -36,7 +36,9 @@ See [README](/README.md) for more documentation.
 
 
 ## Display Clocks
-Timing is everything when it comes to working with screens: everything marches in step with the pixel clock. Pixel clocks are typically in the range 25-165 MHz for SD and HD resolutions; for example, 1280x720p60 uses a pixel clock of 74.25 MHz. If our pixel clock deviates by more than 0.5%, it'll be out of Vesa spec and will likely fail to display. This module generates a high-quality pixel clock using the mixed-mode clock manager (MMCM). When doing our own TMDS SerDes, we also need a 5x pixel clock, which this module also generates. ([display_clocks.v](/hdl/display_clocks.v))
+Timing is everything when it comes to working with screens: everything marches in step with the pixel clock. Pixel clocks are typically in the range 25-165 MHz for SD and HD resolutions; for example, 1280x720p60 uses a pixel clock of 74.25 MHz. If our pixel clock deviates by more than 0.5%, it'll be out of Vesa spec and will likely fail to display. This module generates a high-quality pixel clock using the mixed-mode clock manager (MMCM). When doing our own TMDS SerDes, we also need a 5x pixel clock, which this module also generates. ([display_clocks.v](/rtl/display_clocks.v))
+
+[Display parameters](display-params.md#display-clocks) includes appropriate parameters for four standard pixel clocks, and you can see examples in the [demos](/rtl/demo).
 
 ### Inputs
 
@@ -73,11 +75,9 @@ For example, 720p60:
      74.25 MHz = (100 MHz * 37.125 / 5) / 10
     371.25 MHz = (100 MHz * 37.125 / 5) /  2
 
-The [demo](/hdl/demo) modules include appropriate parameters for four standard pixel clocks to get you started.
-
 
 ## Display Timings
-The display timings module turns timing parameters into appropriately timed sync pulses and provides the current screen coordinates. Accurate timings depend on an accurate [pixel clock](#display-clocks). ([display_timings.v](/hdl/display_timings.v))
+The display timings module turns timing parameters into appropriately timed sync pulses and provides the current screen coordinates. Accurate timings depend on an accurate [pixel clock](#display-clocks). ([display_timings.v](/rtl/display_timings.v))
 
 ### Inputs
 
@@ -97,11 +97,11 @@ The pixel clock must be suitable for the timings given in the parameters (see di
 
 The current beam position is given by `(o_sx,o_sy)`. `o_sx` and `o_sy` are **signed** 16-bit values.
 
-When display enable (`o_de`) is high, these values provide the active drawing pixel and are always positive. During the blanking interval, one or both of `o_sx` and `o_sy` will be negative. This allows you to prepare for drawing, e.g. if you have a two cycle latency to retrieve a pixel's colour you can request the data for the first pixel of a line when `o_sx == -2`.
+When display enable (`o_de`) is high, these values provide the active drawing pixel and are always positive. During the blanking interval, one or both of `o_sx` and `o_sy` will be negative, which allows you to prepare for drawing. For example, if you have a two-cycle latency to retrieve a pixel's colour you can request the data for the first pixel of a line when `o_sx == -2`.
 
-![](display-timings.jpg?raw=true "")
+![](display-timings.png?raw=true "")
 
-At the start of a 1280x720p60 frame, `o_sx == -370` and `o_sy == -45`. Active drawing starts at `o_sx == 0` and `o_sy == 0` and the final coordinates are `o_sx == 1279` and `o_sy == 719`.
+The screen coordinate diagram, above, shows a 1280x720p60 frame. At the start of the frame `o_sx == -370` and `o_sy == -30`. Active drawing starts at `o_sx == 0` and `o_sy == 0` with the final coordinates being `o_sx == 1279` and `o_sy == 719`. See [drawing coordinates](display-params.md#screen-coordinates) for details on all supported resolutions.
 
 Horizontal and vertical sync may be active high or low depending on the display mode; this is controlled using the `H_POL` and `V_POL` parameters (below).
 
@@ -118,13 +118,12 @@ Horizontal and vertical sync may be active high or low depending on the display 
 * `H_POL` - horizontal sync polarity (0:negative, 1:positive)
 * `V_POL` - vertical sync polarity (0:negative, 1:positive)
 
-The [demos](/hdl/demo) modules include appropriate parameters for four common resolutions.
-
+[Display parameters](display-params.md#display-timings) includes appropriate timing parameters for four standard resolutions. You can also see examples of the parameters in the [demos](/rtl/demo).
 
 ## DVI Generator
-The DVI generator has many inputs but is straightforward to use. You hook it up to the display clocks and display timings then add your pixel colour data. ([dvi_generator.v](/hdl/dvi_generator.v))
+The DVI generator has many inputs but is straightforward to use. You hook it up to the display clocks and display timings then add your pixel colour data. ([dvi_generator.v](/rtl/dvi_generator.v))
 
-DVI generator instantiates two other modules to do the actual work: one for [TMDS encoding](/hdl/tmds_encoder_dvi.v) and the other for [10:1 serialization](/hdl/serializer_10to1.v). The TMDS encoder has a [Python model](/README.md#tmds-encoder-model) to aid with development and testing.
+DVI generator instantiates two other modules to do the actual work: one for [TMDS encoding](/rtl/tmds_encoder_dvi.v) and the other for [10:1 serialization](/rtl/serializer_10to1.v). The TMDS encoder has a [Python model](/README.md#tmds-encoder-model) to aid with development and testing.
 
 ### Inputs
 
@@ -156,4 +155,4 @@ You can use these signals with `OBUFDS`, for example:
 
 Where `hdmi_tx_p[0]` and `hdmi_tx_n[0]` are the differential output pins for TMDS channel 0.
 
-You can see an example of this in the [DVI TMDS demo](/hdl/demo/display_demo_dvi.v).
+You can see an example of this in the [DVI TMDS demo](/rtl/demo/display_demo_dvi.v).
