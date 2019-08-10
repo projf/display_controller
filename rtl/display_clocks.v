@@ -7,14 +7,7 @@
 
 // Defaults to 25.2 and 126 MHz for 640x480 at 60 Hz
 
-module display_clocks #(
-    MULT_MASTER=31.5,       // master clock multiplier (2.000-64.000)
-    DIV_MASTER=5,           // master clock divider (1-106)
-    DIV_5X=5.0,             // 5x clock divider (1-128)
-    DIV_1X=25,              // 1x clock divider (1-128)
-    IN_PERIOD=10.0          // period of i_clk in ns (100 MHz = 10.0 ns)
-    )
-    (
+module display_clocks (
     input  wire i_clk,      // input clock
     input  wire i_rst,      // reset (active high)
     output wire o_clk_1x,   // pixel clock
@@ -22,7 +15,13 @@ module display_clocks #(
     output wire o_locked    // clock locked? (active high)
     );
 
-    wire clk_fb;  // internal feedback
+    parameter MULT_MASTER=31.5;     // master clock multiplier (2.000-64.000)
+    parameter DIV_MASTER=5;         // master clock divider (1-106)
+    parameter DIV_5X=5.0;           // 5x clock divider (1-128)
+    parameter DIV_1X=25;            // 1x clock divider (1-128)
+    parameter IN_PERIOD=10.0;       // period of i_clk in ns (100 MHz = 10.0 ns)
+
+    wire clk_fb;  // internal clock feedback
 
     MMCME2_BASE #(
         .BANDWIDTH("OPTIMIZED"),        // Jitter programming (OPTIMIZED, HIGH, LOW)
