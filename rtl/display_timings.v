@@ -7,19 +7,7 @@
 
 // Defaults to 640x480 at 60 Hz
 
-module display_timings #(
-    H_RES=640,      // horizontal resolution (pixels)
-    V_RES=480,      // vertical resolution (lines)
-    H_FP=16,        // horizontal front porch
-    H_SYNC=96,      // horizontal sync
-    H_BP=48,        // horizontal back porch
-    V_FP=10,        // vertical front porch
-    V_SYNC=2,       // vertical sync
-    V_BP=33,        // vertical back porch
-    H_POL=0,        // horizontal sync polarity (0:neg, 1:pos)
-    V_POL=0         // vertical sync polarity (0:neg, 1:pos)
-    )
-    (
+module display_timings (
     input  wire i_pix_clk,          // pixel clock
     input  wire i_rst,              // reset: restarts frame (active high)
     output wire o_hs,               // horizontal sync
@@ -29,6 +17,17 @@ module display_timings #(
     output reg signed [15:0] o_sx,  // horizontal beam position (including blanking)
     output reg signed [15:0] o_sy   // vertical beam position (including blanking)
     );
+
+    parameter H_RES=640;            // horizontal resolution (pixels)
+    parameter V_RES=480;            // vertical resolution (lines)
+    parameter H_FP=16;              // horizontal front porch
+    parameter H_SYNC=96;            // horizontal sync
+    parameter H_BP=48;              // horizontal back porch
+    parameter V_FP=10;              // vertical front porch
+    parameter V_SYNC=2;             // vertical sync
+    parameter V_BP=33;              // vertical back porch
+    parameter H_POL=0;              // horizontal sync polarity (0:neg, 1:pos)
+    parameter V_POL=0;              // vertical sync polarity (0:neg, 1:pos)
 
     // Horizontal: sync, active, and pixels
     localparam signed H_STA  = 0 - H_FP - H_SYNC - H_BP;    // horizontal start
