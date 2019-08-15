@@ -8,7 +8,7 @@ The design aims to be as generic as possible but does make use of Xilinx Series 
 
 For tutorials and further information, visit [projectf.io](https://projectf.io).
 
-_NB. Pixel coordinates are now signed values and have been renamed; see module documentation for [display timings](doc/modules.md#display-timings)._
+_NB. This repository was renamed in August 2019 to **display_controller** (with an underscore) to match Verilog's module naming conventions. See [Changing a remote's URL](https://help.github.com/en/articles/changing-a-remotes-url) if you want to update an existing clone._
 
 ## Contents
 
