@@ -1,0 +1,122 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 27.08.2019 17:08:57
+// Design Name: 
+// Module Name: vga_ctrl
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// vga_ctrl vgac(.clk_65M(clk_65M),.clear(clear),.V_sync(V_sync),.H_sync(H_sync),.H_count(H_count),.V_count(V_count),.Vid_on(Vid_on));
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module vga_ctrl(
+    input clk_65M,
+    input clear,
+    output reg V_sync,
+    output reg H_sync,
+    output [16:0] H_count,
+    output [16:0] V_count,
+    output reg Vid_on
+    );
+    parameter HPIXELS = 1344;
+    parameter VLINES = 806;
+    parameter HBP = 296;
+    parameter HFP = 1320;
+    parameter VBP = 35;
+    parameter VFP = 803;
+    parameter HSP = 136;
+    parameter VSP = 6;
+    
+    reg[16:0] H_count_reg, H_count_next;
+    //FSM for H_count with three outputs 1)H_count, 2)H-sync, 3) V_count_en
+    always@(posedge clk_65M)
+    begin
+        if(clear == 1'b1)
+            H_count_reg <= 0;
+        else 
+            H_count_reg <= H_count_next;        
+    end
+    
+    always@(*)
+    begin
+        H_count_next = H_count_reg;
+        if(H_count_reg == HPIXELS-1)
+            H_count_next = 17'b0;
+        else 
+            H_count_next = H_count_next +1;        
+    end
+    assign H_count = H_count_reg;
+    //Code for H_sync
+    always@(*)
+       begin
+        if(H_count_reg < HSP)
+            H_sync = 1'b0;
+        else
+            H_sync = 1'b1;    
+       
+       end
+    reg V_count_en;
+    //Code for V_count_en
+    always@(*)
+    begin
+        if(H_count_reg == HPIXELS -1)
+            V_count_en <= 1'b1;
+        else
+            V_count_en <= 1'b0;    
+    end
+    
+    reg [16:0] V_count_reg, V_count_next;
+ //FSM for V_count with three outputs 1)V_count, 2)V-sync, 3)   
+    always@(posedge clk_65M)
+    begin
+        if(clear == 1'b1)
+            V_count_reg <= 0;
+        else    
+            V_count_reg <= V_count_next;
+    end
+    
+    always@(*)
+    begin
+        V_count_next = V_count_reg;
+       if(V_count_en == 1'b1)
+         begin 
+            if( V_count_next == VLINES-1 )
+                V_count_next = 0;
+            else 
+                 V_count_next = V_count_reg+1;   
+         end
+    end
+    
+    //Code for Vid_on
+    always@(*)
+    begin
+        if( (H_count_reg > HBP) && (H_count_reg < HFP) && (V_count_reg > VBP) && (V_count_reg < VFP))
+            Vid_on = 1'b1;
+        else
+            Vid_on = 1'b0;    
+    end
+    assign V_count = V_count_reg;
+    
+    //Code V_sync
+    always@(*)
+    begin
+        if(V_count_reg < VSP)
+            V_sync = 1'b0;
+        else    
+            V_sync = 1'b1;
+    end
+    
+    
+    
+endmodule
