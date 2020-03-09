@@ -129,7 +129,6 @@ DVI generator instantiates two other modules to do the actual work: one for [TMD
 
 * `i_pix_clk` - pixel clock ([display clocks](#display-clocks) provides this)
 * `i_pix_clk_5x` - 5x pixel clock for DDR serialization ([display clocks](#display-clocks) provides this)
-* `i_clk_lock` - clock locked? (active high) ([display clocks](#display-clocks) provides this)
 * `i_rst` - reset (active high)
 * `i_de` - display enable ([display timings](#display-timings) provides this)
 * `i_data_ch0 [7:0]` - 8-bit blue colour data (TMDS channel 0)

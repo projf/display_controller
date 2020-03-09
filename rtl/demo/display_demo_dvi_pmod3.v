@@ -2,7 +2,7 @@
 `default_nettype none
 
 // Project F: Display Controller DVI Pmod Demo (3-Bit)
-// (C)2019 Will Green, Open source hardware released under the MIT License
+// (C)2020 Will Green, Open source hardware released under the MIT License
 // Learn more at https://projectf.io
 
 // This demo requires the following Verilog modules:
@@ -22,9 +22,6 @@ module display_demo_dvi_pmod3(
     output wire DVI_B               // 1-bit DVI blue output
     );
 
-    wire rst = ~RST_BTN;            // reset is active low on Arty & Nexys Video
-    // wire rst = RST_BTN;          // reset is active high on Basys3 (BTNC)
-
     // Display Clocks
     wire pix_clk;                   // pixel clock
     wire clk_lock;                  // clock locked?
@@ -39,7 +36,7 @@ module display_demo_dvi_pmod3(
     display_clocks_inst
     (
        .i_clk(CLK),
-       .i_rst(rst),
+       .i_rst(~RST_BTN),            // reset is active low on Arty & Nexys Video
        .o_clk_1x(pix_clk),
        .o_clk_5x(),                 // 5x clock not needed for DVI Pmod
        .o_locked(clk_lock)
@@ -67,7 +64,7 @@ module display_demo_dvi_pmod3(
     )
     display_timings_inst (
         .i_pix_clk(pix_clk),
-        .i_rst(rst),
+        .i_rst(!clk_lock),
         .o_hs(h_sync),
         .o_vs(v_sync),
         .o_de(de),
