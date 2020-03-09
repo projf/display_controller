@@ -79,14 +79,14 @@ module display_timings_tb();
 
     initial begin
         $display($time, " << Starting Simulation >>");
-        clk_480p <= 1;
-        rst_480p <= 1;
-        clk_720p <= 1;
-        rst_720p <= 1;
+        clk_480p = 1;
+        rst_480p = 1;
+        clk_720p = 1;
+        rst_720p = 1;
 
         #10
-        rst_480p <= 0;
-        rst_720p <= 0;
+        rst_480p = 0;
+        rst_720p = 0;
     end
 
     always
