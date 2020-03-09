@@ -19,16 +19,16 @@ module tmds_encode_dvi_tb();
     // encoded TMDS data $display(...) is within tmds_encoder_dvi.v
     initial begin
         $display("\t               1s    B   O");
-        clk <= 1;
-        rst <= 1;
-        de <= 0;
-        ctrl <= 2'b00;
+        clk = 1;
+        rst = 1;
+        de = 0;
+        ctrl = 2'b00;
 
         #10
-        rst <= 0;
+        rst = 0;
 
         #10
-        de <= 1;
+        de = 1;
     end
 
     tmds_encoder_dvi tmds_test (

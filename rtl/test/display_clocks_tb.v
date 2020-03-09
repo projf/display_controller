@@ -100,10 +100,10 @@ module display_clocks_tb();
 
     initial begin
         $display($time, " << Starting Simulation >>");
-        clk <= 1;
-        rst <= 1;
+        clk = 1;
+        rst = 1;
         #10
-        rst <= 0;
+        rst = 0;
         #10000
         $display($time, " << Simulation Complete >>");
     end

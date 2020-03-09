@@ -19,20 +19,20 @@ module async_reset_tb();
 
     initial begin
         $display($time, " << Starting Simulation >>");
-        clk <= 1;
-        rst <= 0;
+        clk = 1;
+        rst = 0;
 
         #3.14159
-        rst <= 1;
+        rst = 1;
 
         #27.1828
-        rst <= 0;
+        rst = 0;
 
         #40
-        rst <= 1;
+        rst = 1;
 
         #15
-        rst <= 0;
+        rst = 0;
     end
 
     always
