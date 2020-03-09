@@ -23,6 +23,8 @@ module display_clocks #(
     );
 
     wire clk_fb;  // internal clock feedback
+    wire clk_1x_pre;
+    wire clk_5x_pre;
 
     MMCME2_BASE #(
         .BANDWIDTH("OPTIMIZED"),        // Jitter programming (OPTIMIZED, HIGH, LOW)
@@ -61,9 +63,9 @@ module display_clocks #(
     MMCME2_BASE_inst (
         /* verilator lint_off PINCONNECTEMPTY */
         // Clock Outputs: 1-bit (each) output: User configurable clock outputs
-        .CLKOUT0(o_clk_5x),             // 1-bit output: CLKOUT0
+        .CLKOUT0(clk_5x_pre),           // 1-bit output: CLKOUT0
         .CLKOUT0B(),                    // 1-bit output: Inverted CLKOUT0
-        .CLKOUT1(o_clk_1x),             // 1-bit output: CLKOUT1
+        .CLKOUT1(clk_1x_pre),           // 1-bit output: CLKOUT1
         .CLKOUT1B(),                    // 1-bit output: Inverted CLKOUT1
         .CLKOUT2(),                     // 1-bit output: CLKOUT2
         .CLKOUT2B(),                    // 1-bit output: Inverted CLKOUT2
@@ -86,5 +88,9 @@ module display_clocks #(
         // Feedback Clocks: 1-bit (each) input: Clock feedback ports
         .CLKFBIN(clk_fb)                // 1-bit input: Feedback clock
     );
+
+    // explicitly buffer output clocks
+    BUFG bufg_clk_pix(.I(clk_1x_pre), .O(o_clk_1x));
+    BUFG bufg_clk_pix_5x(.I(clk_5x_pre), .O(o_clk_5x));
 
 endmodule
