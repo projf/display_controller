@@ -2,7 +2,7 @@
 `default_nettype none
 
 // Project F: Display Controller DVI Demo
-// (C)2019 Will Green, Open source hardware released under the MIT License
+// (C)2020 Will Green, Open source hardware released under the MIT License
 // Learn more at https://projectf.io
 
 // This demo requires the following Verilog modules:
@@ -27,9 +27,6 @@ module display_demo_dvi(
     output wire [2:0] hdmi_tx_p     // Three HDMI channels differential positive
     );
 
-    wire rst = ~RST_BTN;            // reset is active low on Arty & Nexys Video
-    // wire rst = RST_BTN;          // reset is active high on Basys3 (BTNC)
-
     // Display Clocks
     wire pix_clk;                   // pixel clock
     wire pix_clk_5x;                // 5x clock for 10:1 DDR SerDes
@@ -45,7 +42,7 @@ module display_demo_dvi(
     display_clocks_inst
     (
        .i_clk(CLK),
-       .i_rst(rst),
+       .i_rst(~RST_BTN),            // reset is active low on Arty & Nexys Video
        .o_clk_1x(pix_clk),
        .o_clk_5x(pix_clk_5x),
        .o_locked(clk_lock)
@@ -73,7 +70,7 @@ module display_demo_dvi(
     )
     display_timings_inst (
         .i_pix_clk(pix_clk),
-        .i_rst(rst),
+        .i_rst(!clk_lock),
         .o_hs(h_sync),
         .o_vs(v_sync),
         .o_de(de),
@@ -125,8 +122,7 @@ module display_demo_dvi(
     dvi_generator dvi_out (
         .i_pix_clk(pix_clk),
         .i_pix_clk_5x(pix_clk_5x),
-        .i_clk_lock(clk_lock),
-        .i_rst(rst),
+        .i_rst(!clk_lock),
         .i_de(de),
         .i_data_ch0(blue),
         .i_data_ch1(green),

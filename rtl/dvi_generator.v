@@ -8,7 +8,6 @@
 module dvi_generator(
     input  wire i_pix_clk,          // pixel clock
     input  wire i_pix_clk_5x,       // 5 x pixel clock for DDR serialization
-    input  wire i_clk_lock,         // clock locked? (active high)
     input  wire i_rst,              // reset (active high)
     input  wire i_de,               // display enable (draw video)
     input  wire [7:0] i_data_ch0,   // channel 0 - 8-bit colour data
@@ -56,7 +55,7 @@ module dvi_generator(
     wire rst_oserdes;
     async_reset async_reset_instance (
         .i_clk(i_pix_clk),
-        .i_rst(i_rst | ~i_clk_lock),
+        .i_rst(i_rst),
         .o_rst(rst_oserdes)
     );
 
