@@ -1,16 +1,16 @@
 # Project F Display Controller
 
-The Project F display controller makes it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. This design and its documentation are licensed under the MIT License.
+The [Project F](https://projectf.io) display controller makes it easy to add video output to FPGA projects. It's written in Verilog and supports VGA, DVI, and HDMI displays. It includes full configuration for 640x480, 800x600, 1280x720, and 1920x1080, as well as the ability to define custom resolutions. This design and its documentation are licensed under the MIT License.
 
 To get started, take a look at the [demos](#demos) then refer to [modules](doc/modules.md) and [display parameters](doc/display-params.md) for more details.
 
 The design aims to be as generic as possible but does make use of Xilinx Series 7 specific features, such as SerDes. If you want advice on adapting this design to other FPGAs, then take a look at [porting](doc/porting.md).
 
-For further information visit [projectf.io](https://projectf.io). Follow [@WillFlux@mastodon.social](https://mastodon.social/@WillFlux) or [@willflux.bsky.social](https://bsky.app/profile/willflux.bsky.social) for updates on my FPGA and RISC-V projects.
+Follow [@WillFlux@mastodon.social](https://mastodon.social/@WillFlux) or [@willflux.bsky.social](https://bsky.app/profile/willflux.bsky.social) for updates on my FPGA and RISC-V projects.
 
-## Isle
+## 🏝️ Isle
 
-My latest project is 🏝️ Isle FPGA Computer, which has its own repo at [github.com/projf/isle](https://github.com/projf/isle); learn more and get started with [Isle FPGA Computer](http://projectf.io/isle/fpga-computer.html). Isle includes an updated Verilog display controller and TMDS encoder that you might prefer to this design; check out [Isle Display](https://projectf.io/isle/display.html).
+My latest project is Isle FPGA Computer, which has its own repo at [github.com/projf/isle](https://github.com/projf/isle); learn more and get started with [Isle FPGA Computer](http://projectf.io/isle/fpga-computer.html). Isle includes an updated Verilog display controller and TMDS encoder that you might prefer to this design; check out [Isle Display](https://projectf.io/isle/display.html).
 
 ## Contents
 
